@@ -6,6 +6,7 @@ import {
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
   LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
+  CHANGE_IMAGE_REQUEST, CHANGE_IMAGE_SUCCESS, CHANGE_IMAGE_FAILURE,
 } from '../reducers/types'
 
 function firebaseCreateUserAPI(data) {
@@ -98,6 +99,47 @@ function* logout() {
   }
 }
 
+function firebaseStorageAPI(data) {
+  return firebase.storage().ref('user_image')
+    .child(data.uid)
+    .put(data.file, data.metadata);
+}
+
+function firebaseGetDownloadAPI(snapshot) {
+  return snapshot.ref.getDownloadURL();
+}
+
+function firebaseUpdateImageAPI(url) {
+  return firebase.auth().currentUser.updateProfile({
+    photoURL: url,
+  })
+}
+
+function firebaseUpdateDatabaseAPI(uid, url) {
+  return firebase.database().ref('users')
+    .child(uid)
+    .update({ image: uid })
+}
+
+function* changeImage(action) {
+  try {
+    const snapshot = yield call(firebaseStorageAPI, action.data);
+    const url = yield call(firebaseGetDownloadAPI, snapshot);
+    yield call(firebaseUpdateImageAPI, url)
+    yield call(firebaseUpdateDatabaseAPI, action.data.uid, url)
+    yield put({
+      type: CHANGE_IMAGE_SUCCESS,
+      data: { image: url }
+    })
+  } catch (error) {
+    console.error(error)
+    yield put({
+      type: CHANGE_IMAGE_FAILURE,
+      error: error
+    })
+  }
+}
+
 function* watchRegister() {
   yield takeLatest(REGISTER_USER_REQUEST, register)
 }
@@ -110,11 +152,16 @@ function* watchLogout() {
   yield takeLatest(LOGOUT_USER_REQUEST, logout)
 }
 
+function* watchChangeImage() {
+  yield takeLatest(CHANGE_IMAGE_REQUEST, changeImage)
+}
+
 
 export default function* userSaga() {
   yield all([
     fork(watchRegister),
     fork(watchLogin),
     fork(watchLogout),
+    fork(watchChangeImage),
   ])
 }
