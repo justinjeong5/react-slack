@@ -5,6 +5,7 @@ import md5 from 'md5'
 import {
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
+  LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
 } from '../reducers/types'
 
 function firebaseCreateUserAPI(data) {
@@ -78,6 +79,25 @@ function* login(action) {
   }
 }
 
+function firebaseSignOutAPI() {
+  return firebase.auth().signOut();
+}
+
+function* logout() {
+  try {
+    yield call(firebaseSignOutAPI);
+    yield put({
+      type: LOGOUT_USER_SUCCESS,
+    })
+  } catch (error) {
+    console.error(error)
+    yield put({
+      type: LOGOUT_USER_FAILURE,
+      error: error
+    })
+  }
+}
+
 function* watchRegister() {
   yield takeLatest(REGISTER_USER_REQUEST, register)
 }
@@ -86,10 +106,15 @@ function* watchLogin() {
   yield takeLatest(LOGIN_USER_REQUEST, login)
 }
 
+function* watchLogout() {
+  yield takeLatest(LOGOUT_USER_REQUEST, logout)
+}
+
 
 export default function* userSaga() {
   yield all([
     fork(watchRegister),
     fork(watchLogin),
+    fork(watchLogout),
   ])
 }
