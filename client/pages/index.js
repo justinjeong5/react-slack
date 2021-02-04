@@ -5,9 +5,9 @@ import Main from '../components/Main'
 
 function Home() {
   return (
-    <div>
-      <div><Menu /></div>
-      <div><Main /></div>
+    <div style={{ display: 'flex' }}>
+      <div style={{ height: '100vh', width: '300px' }}><Menu /></div>
+      <div style={{ height: '100vh', width: '100%' }}><Main /></div>
     </div>
   )
 }
