@@ -1,14 +1,19 @@
 import React from 'react'
+import styled from 'styled-components'
+
 import Menu from '../components/Menu'
 import Main from '../components/Main'
 
+const RootWrapper = styled.div`
+  display: flex;
+`
 
 function Home() {
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ height: '100vh', width: '300px' }}><Menu /></div>
-      <div style={{ height: '100vh', width: '100%' }}><Main /></div>
-    </div>
+    <RootWrapper>
+      <Menu />
+      <Main />
+    </RootWrapper>
   )
 }
 
