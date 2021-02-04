@@ -11,7 +11,7 @@ function App({ Component }) {
 }
 
 App.propTypes = {
-  Component: Proptypes.node.isRequired,
+  Component: Proptypes.elementType.isRequired,
 }
 
 export default App
