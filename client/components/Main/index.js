@@ -1,26 +1,21 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import RoomInfo from './RoomInfo'
 import Messages from './Messages'
 import Sender from './Sender'
 
-const ComponentWrapper = styled.div`
-  margin: 10px
-`
-
 function Main() {
   return (
     <div>
-      <ComponentWrapper>
+      <div style={{ margin: '10px' }}>
         <RoomInfo />
-      </ComponentWrapper>
-      <ComponentWrapper>
+      </div>
+      <div style={{ margin: '10px' }}>
         <Messages />
-      </ComponentWrapper>
-      <ComponentWrapper>
+      </div>
+      <div style={{ margin: '10px' }}>
         <Sender />
-      </ComponentWrapper>
+      </div>
     </div>
   )
 }

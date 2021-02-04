@@ -1,39 +1,32 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import UserPanel from './UserPanel'
 import Starred from './Starred'
 import ChatRooms from './ChatRooms'
 import DirectRooms from './DirectRooms'
 
-const RootWrapper = styled.div`
-  background-color: #415972;
-  padding: 1em;
-  min-height: 100vh;
-  color: white;
-  min-width: 300px;
-`
-
-const ComponentWrapper = styled.div`
-  margin: 10px;
-`
-
 function Menu() {
   return (
-    <RootWrapper>
-      <ComponentWrapper>
+    <div style={{
+      backgroundColor: '#415972',
+      padding: '1em',
+      minHeight: '100vh',
+      color: 'white',
+      minWidth: '300px',
+    }}>
+      <div style={{ margin: '10px' }}>
         <UserPanel />
-      </ComponentWrapper>
-      <ComponentWrapper>
+      </div>
+      <div style={{ margin: '10px' }}>
         <Starred />
-      </ComponentWrapper>
-      <ComponentWrapper>
+      </div>
+      <div style={{ margin: '10px' }}>
         <ChatRooms />
-      </ComponentWrapper>
-      <ComponentWrapper>
+      </div>
+      <div style={{ margin: '10px' }}>
         <DirectRooms />
-      </ComponentWrapper>
-    </RootWrapper>
+      </div>
+    </div >
   )
 }
 
