@@ -7,7 +7,7 @@ import { LOGIN_USER_REQUEST } from '../../../reducers/types'
 function LoginUser() {
 
   const dispatch = useDispatch();
-  const { loginUserDone, loginUserLoading, loginUserError } = useSelector(state => state.user)
+  const { loginUserLoading, loginUserError } = useSelector(state => state.user)
   const [showModal, setShowModal] = useState(false)
 
   const handleShow = useCallback(() => {
@@ -15,13 +15,10 @@ function LoginUser() {
   }, [])
 
   useEffect(() => {
-    if (loginUserDone) {
-      setShowModal(prev => !prev)
-    }
     if (loginUserError) {
       message.error(loginUserError.message)
     }
-  }, [loginUserDone, loginUserError])
+  }, [loginUserError])
 
   const onFinish = useCallback((values) => {
     dispatch({

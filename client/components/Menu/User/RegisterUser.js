@@ -1,26 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Button, Form, Input, Space, message } from 'antd'
+import { Modal, Button, Form, Input, Space, message, notification } from 'antd'
 import { UserAddOutlined, MailOutlined, UserOutlined, LockOutlined, CheckSquareOutlined } from '@ant-design/icons'
 import { REGISTER_USER_REQUEST } from '../../../reducers/types'
 function RegisterUser() {
 
   const dispatch = useDispatch();
-  const { registerUserDone, registerUserLoading, registerUserError } = useSelector(state => state.user)
+  const { registerUserLoading, registerUserError } = useSelector(state => state.user)
   const [showModal, setShowModal] = useState(false);
+  const [form] = Form.useForm();
 
   const handleShow = useCallback(() => {
     setShowModal(prev => !prev)
   }, [])
 
   useEffect(() => {
-    if (registerUserDone) {
-      setShowModal(prev => !prev)
-    }
     if (registerUserError) {
       message.error(registerUserError.message)
     }
-  }, [registerUserDone, registerUserError])
+    if (registerUserLoading) {
+      notification.open({
+        message: '회원가입 시도중',
+        description: '회원가입이 완료되면 자동으로 로그인 됩니다.',
+      })
+    }
+  }, [registerUserError, registerUserLoading])
 
   const onFinish = useCallback((values) => {
     dispatch({
@@ -74,6 +78,7 @@ function RegisterUser() {
         <Form
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
+          form={form}
           style={{ width: '400px' }}
           onFinish={onFinish}
         >
@@ -96,7 +101,7 @@ function RegisterUser() {
             name="password"
             rules={fromPasswordRules}
           >
-            <Input.Password prefix={<LockOutlined />} placeholder="특수기호 포함, 7자리 이상" />
+            <Input.Password prefix={<LockOutlined />} placeholder="특수기호 포함, 6자리 이상" />
           </Form.Item>
           <Form.Item
             label="비밀번호 확인"
