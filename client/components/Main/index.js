@@ -6,7 +6,7 @@ import Sender from './Sender'
 
 function Main() {
   return (
-    <div>
+    <div style={{ height: '100vh', width: 'calc(100vw - 300px)' }}>
       <div style={{ margin: '10px' }}>
         <RoomInfo />
       </div>
