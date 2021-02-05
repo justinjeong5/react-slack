@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import mime from 'mime-types'
-import { Typography, Space, notification, Image, Dropdown, Menu } from 'antd'
+import { Typography, Space, notification, Image, Dropdown, Menu, message } from 'antd'
 import { SlackOutlined, DownOutlined } from '@ant-design/icons'
 
 import RegisterUser from './User/RegisterUser'
 import LoginUser from './User/LoginUser'
 import LogoutUser from './User/LogoutUser'
 
-import { CHANGE_IMAGE_REQUEST, RESET_USER_STORE } from '../../reducers/types'
+import { UPLOAD_IMAGE_REQUEST, RESET_USER_STORE } from '../../reducers/types'
 
 const { Title } = Typography;
 
@@ -17,6 +17,7 @@ function UserPanel() {
   const inputOpenImageRef = useRef();
   const dispatch = useDispatch();
   const { currentUser, loginUserDone } = useSelector(state => state.user)
+  const { uploadImageLoading, uploadImageDone } = useSelector(state => state.image)
 
   useEffect(() => {
     if (loginUserDone) {
@@ -30,7 +31,16 @@ function UserPanel() {
         })
       }, 1000)
     }
-  }, [loginUserDone])
+    if (uploadImageLoading) {
+      notification.open({
+        message: '프로필 사진 변경중',
+        description: '프로필 사진을 변경하고 있습니다.'
+      })
+    }
+    if (uploadImageDone) {
+      message.success('프로필 사진이 변경되었습니다.')
+    }
+  }, [loginUserDone, uploadImageLoading, uploadImageDone])
 
   const handleUploadImageRef = () => {
     inputOpenImageRef.current.click();
@@ -40,7 +50,7 @@ function UserPanel() {
     const file = event.target.files[0];
     const metadata = { contentType: mime.lookup(file.name) };
     dispatch({
-      type: CHANGE_IMAGE_REQUEST,
+      type: UPLOAD_IMAGE_REQUEST,
       data: {
         uid: currentUser.uid,
         file,
@@ -70,7 +80,7 @@ function UserPanel() {
           src={currentUser.image} />
         <Dropdown
           overlay={<Menu>
-            <Menu.Item onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
+            <Menu.Item disabled={uploadImageLoading} onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
           </Menu>}
           trigger={['click']}
         >
