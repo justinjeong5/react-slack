@@ -23,13 +23,6 @@ function Messages() {
   ), [])
 
   useEffect(() => {
-    dispatch({
-      type: GET_CHATS_OF_ROOM,
-      data: { roomId: currentRoom._id }
-    })
-  }, [currentRoom])
-
-  useEffect(() => {
     messagesBottomRef.scrollIntoView();
   }, [messagesBottomRef, currentChats])
 

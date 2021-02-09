@@ -2,12 +2,15 @@ import produce from 'immer'
 import {
   LOAD_CHATS_REQUEST, LOAD_CHATS_SUCCESS, LOAD_CHATS_FAILURE,
   SEND_CHAT_SUBSCRIBE, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
-  GET_CHATS_OF_ROOM,
+  GET_CHATS_OF_ROOM, GET_CURRENT_ROOM,
 } from './types'
 
 const initialState = {
   chatList: [],
   currentChats: [],
+
+  readCount: {},
+  currentRoomId: null,
 
   sendChatDone: false,
   sendChatLoading: false,
@@ -26,6 +29,13 @@ const chatReducer = (state = initialState, action) => {
         draft.loadChatsError = null;
         break;
       case LOAD_CHATS_SUCCESS:
+        action.data.chats.forEach(chat => {
+          if (!draft.readCount[chat.room]) {
+            draft.readCount[chat.room] = { read: 0, count: 0 }
+          }
+          draft.readCount[chat.room].read++;
+          draft.readCount[chat.room].count++;
+        })
         draft.chatList = action.data.chats;
         draft.loadChatsLoading = false;
         draft.loadChatsDone = true;
@@ -41,7 +51,11 @@ const chatReducer = (state = initialState, action) => {
         break;
       case SEND_CHAT_SUCCESS:
         draft.chatList.push(action.data.chat)
-        draft.currentChats.push(action.data.chat)
+        draft.readCount[action.data.chat.room].count++;
+        if (draft.currentRoomId === action.data.chat.room) {
+          draft.currentChats.push(action.data.chat)
+          draft.readCount[action.data.chat.room].read++;
+        }
         draft.sendChatLoading = false;
         draft.sendChatDone = true;
         break;
@@ -50,9 +64,17 @@ const chatReducer = (state = initialState, action) => {
         draft.sendChatError = action.error;
         break;
       case GET_CHATS_OF_ROOM:
+        if (!draft.readCount[action.data.roomId]) {
+          draft.readCount[action.data.roomId] = { read: 0, count: 0 }
+        } else {
+          draft.readCount[action.data.roomId].read = draft.readCount[action.data.roomId].count;
+        }
         draft.currentChats = draft.chatList.filter(chat =>
           chat.room === action.data.roomId
         )
+        break;
+      case GET_CURRENT_ROOM:
+        draft.currentRoomId = action.data.room._id;
         break;
       default:
         break;

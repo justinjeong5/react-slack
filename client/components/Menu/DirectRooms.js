@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid'
-import { Typography } from 'antd'
+import { Typography, Badge } from 'antd'
 import { RocketOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 import ModalForm from './DirectRooms/ModalForm'
@@ -16,6 +16,7 @@ function DirectRooms() {
   const { currentUser } = useSelector(state => state.user)
   const { currentDirect } = useSelector(state => state.direct)
   const { currentRoom } = useSelector(state => state.room)
+  const { readCount } = useSelector(state => state.chat)
   const [showModal, setShowModal] = useState(false);
   const handleShow = useCallback(() => {
     setShowModal(prev => !prev)
@@ -32,6 +33,11 @@ function DirectRooms() {
     })
   }, [])
 
+  const count = useCallback((room) => {
+    if (!readCount[room._id]) return 0;
+    return readCount[room._id].count - readCount[room._id].read
+  }, [readCount])
+
   const style = useCallback((direct) => {
     return direct._id === currentRoom._id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
   }, [currentRoom])
@@ -47,9 +53,14 @@ function DirectRooms() {
           {currentUser._id && <PlusSquareOutlined onClick={handleShow} />}
         </div>
       </Title>
-      {currentDirect.map(direct => (<div key={uuidv4()} onClick={handleCurrent(direct)} style={{ padding: '5px 10px', marginTop: 5, ...style(direct) }}>
-        {`# ${direct.title}`}
-      </div>))}
+      {currentDirect.map(direct => (
+        <div
+          key={uuidv4()}
+          onClick={handleCurrent(direct)}
+          style={{ padding: '5px 10px', marginTop: 5, ...style(direct) }}>
+          <span>{`# ${direct.title}`}</span>
+          <Badge showZero={false} count={count(direct)} offset={[7, 0]} size="small" overflowCount='9' />
+        </div>))}
       {currentDirect.length === 0 && <div style={{ marginLeft: 25, color: '#c3c3c3' }}>DM을 시작해보세요</div>}
       <ModalForm showModal={showModal} handleShow={handleShow} />
     </div >

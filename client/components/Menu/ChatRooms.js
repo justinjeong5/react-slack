@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid'
-import { Typography, notification } from 'antd'
+import { Typography, notification, Badge } from 'antd'
 import { MessageOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 import ModalForm from './ChatRooms/ModalForm';
@@ -15,6 +15,7 @@ function ChatRooms() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user)
   const { currentRoom, roomList, createRoomDone } = useSelector(state => state.room)
+  const { readCount } = useSelector(state => state.chat)
   const [showModal, setShowModal] = useState(false);
   const handleShow = useCallback(() => {
     setShowModal(prev => !prev)
@@ -26,6 +27,14 @@ function ChatRooms() {
       notification.open({
         message: '알립니다.',
         description: '새로운 대화방이 생성되었습니다.'
+      })
+    }
+    if (roomList.length) {
+      dispatch({
+        type: GET_CURRENT_ROOM,
+        data: {
+          room: roomList[0]
+        }
       })
     }
   }, [createRoomDone])
@@ -41,10 +50,14 @@ function ChatRooms() {
     })
   }, [])
 
+  const count = useCallback((room) => {
+    if (!readCount[room._id]) return 0;
+    return readCount[room._id].count - readCount[room._id].read
+  }, [readCount])
+
   const style = useCallback((room) => {
     return room._id === currentRoom._id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
   }, [currentRoom])
-
 
   return (
     <div>
@@ -58,9 +71,15 @@ function ChatRooms() {
           </div>
         </div>
       </Title>
-      {roomList.map(room => (<div key={uuidv4()} onClick={handleCurrent(room)} style={{ padding: '5px 10px', marginTop: 5, ...style(room) }}>
-        {`# ${room.title}`}
-      </div>))}
+      {roomList.map(room => (
+        <div
+          key={uuidv4()}
+          onClick={handleCurrent(room)}
+          style={{ padding: '5px 10px', marginTop: 5, ...style(room) }}>
+          <span>{`# ${room.title}`}</span>
+          <Badge showZero={false} count={count(room)} offset={[7, 0]} size="small" overflowCount='9' />
+        </div>
+      ))}
       {roomList.length === 0 && <div style={{ marginLeft: 25, color: '#c3c3c3' }}>대화를 시작해보세요</div>}
       <ModalForm showModal={showModal} handleShow={handleShow} />
     </div >
