@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
-import { Card, Image } from 'antd'
+import { Card, Image, Empty } from 'antd'
 
 import { GET_CHATS_OF_ROOM } from '../../reducers/types'
+moment.locale('ko')
 
 function Messages() {
 
@@ -64,8 +65,9 @@ function Messages() {
           ? renderMyMessage(chat)
           : renderMessage(chat))
       )}
+      {currentChats.length === 0 && <Empty description='대화를 시작해보세요!' style={{ marginTop: 100 }} />}
       <div ref={node => messagesBottomRef = node}></div>
-    </div>
+    </div >
   )
 }
 

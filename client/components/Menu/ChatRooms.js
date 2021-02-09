@@ -21,11 +21,11 @@ function ChatRooms() {
   }, [])
 
   useEffect(() => {
-    if (createRoomDone) {
-      handleShow();
+    if (createRoomDone && !showModal) {
+      setShowModal(false);
       notification.open({
-        message: '방이 생성되었습니다.',
-        description: '방이 정상적으로 생성되었습니다.'
+        message: '알립니다.',
+        description: '새로운 대화방이 생성되었습니다.'
       })
     }
   }, [createRoomDone])
@@ -61,6 +61,7 @@ function ChatRooms() {
       {roomList.map(room => (<div key={uuidv4()} onClick={handleCurrent(room)} style={{ padding: '5px 10px', marginTop: 5, ...style(room) }}>
         {`# ${room.title}`}
       </div>))}
+      {roomList.length === 0 && <div style={{ marginLeft: 25, color: '#c3c3c3' }}>대화를 시작해보세요</div>}
       <ModalForm showModal={showModal} handleShow={handleShow} />
     </div >
   )

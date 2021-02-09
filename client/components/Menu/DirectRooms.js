@@ -47,11 +47,10 @@ function DirectRooms() {
           {currentUser._id && <PlusSquareOutlined onClick={handleShow} />}
         </div>
       </Title>
-      {
-        currentDirect.map(direct => (<div key={uuidv4()} onClick={handleCurrent(direct)} style={{ padding: '5px 10px', marginTop: 5, ...style(direct) }}>
-          {`# ${direct.title}`}
-        </div>))
-      }
+      {currentDirect.map(direct => (<div key={uuidv4()} onClick={handleCurrent(direct)} style={{ padding: '5px 10px', marginTop: 5, ...style(direct) }}>
+        {`# ${direct.title}`}
+      </div>))}
+      {currentDirect.length === 0 && <div style={{ marginLeft: 25, color: '#c3c3c3' }}>DM을 시작해보세요</div>}
       <ModalForm showModal={showModal} handleShow={handleShow} />
     </div >
   )
