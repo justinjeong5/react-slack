@@ -8,8 +8,12 @@ import chatSaga from './chat'
 import imageSaga from './image'
 import starSaga from './star'
 
+import config from '../config/config';
+const env = process.env.NODE_ENV || 'development';
+const { SERVER_URL } = config[env];
+
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:3065';
+axios.defaults.baseURL = SERVER_URL;
 
 export default function* rootSaga() {
   yield all([
