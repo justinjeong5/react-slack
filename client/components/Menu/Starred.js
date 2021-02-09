@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import { Typography } from 'antd'
@@ -21,12 +21,12 @@ function Starred() {
     })
     dispatch({
       type: GET_CHATS_OF_ROOM,
-      data: { roomId: star.id }
+      data: { roomId: star._id }
     })
   }, [])
 
   const style = useCallback((star) => {
-    return star.id === currentRoom.id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
+    return star._id === currentRoom._id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
   }, [currentRoom])
 
 
@@ -37,7 +37,7 @@ function Starred() {
           <StarOutlined />{` STARRED [${starList.length}]`}
         </div>
       </Title>
-      {starList.map(star => (<div key={uuidv4()} onClick={handleCurrent(star)} style={{ paddingLeft: 10, ...style(star) }}>
+      {starList.map(star => (<div key={uuidv4()} onClick={handleCurrent(star)} style={{ padding: '5px 10px', marginTop: 5, ...style(star) }}>
         {`# ${star.title}`}
       </div>))}
     </div>

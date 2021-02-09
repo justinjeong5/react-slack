@@ -8,7 +8,11 @@ import RegisterUser from './User/RegisterUser'
 import LoginUser from './User/LoginUser'
 import LogoutUser from './User/LogoutUser'
 
-import { UPLOAD_IMAGE_REQUEST, RESET_USER_STORE } from '../../reducers/types'
+import {
+  RESET_USER_STORE, RESET_STAR_STORE, RESET_DIRECT_STORE,
+  LOAD_ROOMS_REQUEST, LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST,
+  UPLOAD_IMAGE_REQUEST,
+} from '../../reducers/types'
 
 const { Title } = Typography;
 
@@ -16,7 +20,7 @@ function UserPanel() {
 
   const inputOpenImageRef = useRef();
   const dispatch = useDispatch();
-  const { currentUser, loginUserDone } = useSelector(state => state.user)
+  const { currentUser, loginUserDone, logoutUserDone } = useSelector(state => state.user)
   const { uploadImageLoading, uploadImageDone } = useSelector(state => state.image)
 
   useEffect(() => {
@@ -30,7 +34,31 @@ function UserPanel() {
           type: RESET_USER_STORE,
         })
       }, 1000)
+      dispatch({
+        type: LOAD_ROOMS_REQUEST
+      })
+      dispatch({
+        type: LOAD_DIRECTS_REQUEST
+      })
+      dispatch({
+        type: LOAD_CHATS_REQUEST
+      })
     }
+
+  }, [loginUserDone])
+
+  useEffect(() => {
+    if (logoutUserDone) {
+      dispatch({
+        type: RESET_STAR_STORE
+      })
+      dispatch({
+        type: RESET_DIRECT_STORE
+      })
+    }
+  }, [logoutUserDone])
+
+  useEffect(() => {
     if (uploadImageLoading) {
       notification.open({
         message: '프로필 사진 변경중',
@@ -40,7 +68,7 @@ function UserPanel() {
     if (uploadImageDone) {
       message.success('프로필 사진이 변경되었습니다.')
     }
-  }, [loginUserDone, uploadImageLoading, uploadImageDone])
+  }, [uploadImageLoading, uploadImageDone])
 
   const handleUploadImageRef = () => {
     inputOpenImageRef.current.click();
@@ -52,7 +80,7 @@ function UserPanel() {
     dispatch({
       type: UPLOAD_IMAGE_REQUEST,
       data: {
-        uid: currentUser.uid,
+        _id: currentUser._id,
         file,
         metadata
       }
@@ -66,7 +94,7 @@ function UserPanel() {
           <SlackOutlined /> React Slack
         </div>
         <div style={{ display: 'flex' }}>
-          {currentUser.uid
+          {currentUser._id
             ? <LogoutUser />
             : <Space>
               <LoginUser />
@@ -74,7 +102,7 @@ function UserPanel() {
             </Space>}
         </div>
       </Title>
-      {currentUser.uid && <div style={{ display: 'flex', marginBottom: '1rem' }}>
+      {currentUser._id && <div style={{ display: 'flex', marginBottom: '1rem' }}>
         <Image
           style={{ width: 40, height: 40, marginTop: 3, borderRadius: 20 }}
           src={currentUser.image} />

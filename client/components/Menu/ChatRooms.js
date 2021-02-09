@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid'
-import { Typography } from 'antd'
+import { Typography, notification } from 'antd'
 import { MessageOutlined, PlusSquareOutlined } from '@ant-design/icons'
 
 import ModalForm from './ChatRooms/ModalForm';
@@ -14,17 +14,21 @@ function ChatRooms() {
 
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user)
-  const { currentRoom, roomList } = useSelector(state => state.room)
+  const { currentRoom, roomList, createRoomDone } = useSelector(state => state.room)
   const [showModal, setShowModal] = useState(false);
   const handleShow = useCallback(() => {
     setShowModal(prev => !prev)
   }, [])
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: LOAD_ROOM_REQUEST
-  //   })
-  // }, [])
+  useEffect(() => {
+    if (createRoomDone) {
+      handleShow();
+      notification.open({
+        message: '방이 생성되었습니다.',
+        description: '방이 정상적으로 생성되었습니다.'
+      })
+    }
+  }, [createRoomDone])
 
   const handleCurrent = useCallback((room) => () => {
     dispatch({
@@ -33,12 +37,12 @@ function ChatRooms() {
     })
     dispatch({
       type: GET_CHATS_OF_ROOM,
-      data: { roomId: room.id }
+      data: { roomId: room._id }
     })
   }, [])
 
   const style = useCallback((room) => {
-    return room.id === currentRoom.id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
+    return room._id === currentRoom._id ? { backgroundColor: 'gray', borderRadius: 4 } : null;
   }, [currentRoom])
 
 
@@ -50,7 +54,7 @@ function ChatRooms() {
             <MessageOutlined />{` CHANNELS [${roomList.length}]`}
           </div>
           <div>
-            {currentUser.uid && <PlusSquareOutlined onClick={handleShow} />}
+            {currentUser._id && <PlusSquareOutlined onClick={handleShow} />}
           </div>
         </div>
       </Title>
