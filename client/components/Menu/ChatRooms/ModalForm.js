@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types'
 import { Form, Modal, Button, Space, Input } from 'antd'
@@ -9,7 +9,6 @@ import { CREATE_ROOM_REQUEST } from '../../../reducers/types'
 function ModalForm({ showModal, handleShow }) {
 
   const dispatch = useDispatch();
-  const { currentUser } = useSelector(state => state.user)
 
   const onFinish = useCallback((values) => {
     dispatch({
@@ -17,15 +16,9 @@ function ModalForm({ showModal, handleShow }) {
       data: {
         title: values.title,
         description: values.description,
-        writer: {
-          uid: currentUser.uid,
-          nickname: currentUser.nickname,
-          email: currentUser.email,
-          image: currentUser.image,
-        }
       }
     })
-  }, [currentUser]);
+  }, []);
 
   const formTitleRules = useMemo(() => ([
     { required: true, message: '방 제목을 입력해주세요.' },
