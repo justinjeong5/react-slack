@@ -11,7 +11,7 @@ import LogoutUser from './User/LogoutUser'
 import {
   RESET_USER_STORE, RESET_STAR_STORE, RESET_DIRECT_STORE,
   LOAD_ROOMS_REQUEST, LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST,
-  UPLOAD_IMAGE_REQUEST,
+  LOAD_STARS_REQUEST, UPLOAD_IMAGE_REQUEST,
 } from '../../reducers/types'
 
 const { Title } = Typography;
@@ -42,6 +42,9 @@ function UserPanel() {
       })
       dispatch({
         type: LOAD_CHATS_REQUEST
+      })
+      dispatch({
+        type: LOAD_STARS_REQUEST
       })
     }
 
