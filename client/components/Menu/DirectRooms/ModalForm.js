@@ -1,30 +1,31 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types'
-import { Select, Modal, Button, Space } from 'antd'
+import { v4 as uuidv4 } from 'uuid'
+import { Select, Modal, Button } from 'antd'
 import { FormOutlined, } from '@ant-design/icons'
 
-import { ADD_DIRECT_REQUEST, LOAD_DIRECT_CANDIDATE_REQUEST } from '../../../reducers/types'
+import { LOAD_DIRECT_CANDIDATE_REQUEST } from '../../../reducers/types'
+import { createDirect } from '../../../util/socket';
 
 function ModalForm({ showModal, handleShow }) {
 
   const dispatch = useDispatch();
   const [newDirect, setNewDirect] = useState('')
   const { currentUser } = useSelector(state => state.user)
-  const { directList, currentDirect, loadDirectCandidateDone, loadDirectCandiateLoading } = useSelector(state => state.direct)
-
+  const { directList, currentDirect } = useSelector(state => state.direct)
 
   const handleChange = useCallback((value) => {
     setNewDirect(value);
   }, [])
 
   const handleSubmit = useCallback(() => {
-    dispatch({
-      type: ADD_DIRECT_REQUEST,
-      data: { _id: newDirect }
+    createDirect({
+      user1: currentUser._id,
+      user2: newDirect
     })
     handleShow();
-  }, [newDirect])
+  }, [newDirect, currentUser])
 
   useEffect(() => {
     if (showModal && directList.length === 0)
@@ -46,8 +47,8 @@ function ModalForm({ showModal, handleShow }) {
       visible={showModal}
       onCancel={handleShow}
       width={400}
-      footer={[<Button onClick={handleShow} >취소</Button>,
-      <Button type='primary' onClick={handleSubmit} >MD 시작하기</Button>]}
+      footer={[<Button key={uuidv4()} onClick={handleShow} >취소</Button>,
+      <Button key={uuidv4()} type='primary' onClick={handleSubmit} >MD 시작하기</Button>]}
     >
       <Select
         allowClear

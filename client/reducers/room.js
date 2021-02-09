@@ -1,7 +1,7 @@
 import produce from 'immer'
 import {
   LOAD_ROOMS_REQUEST, LOAD_ROOMS_SUCCESS, LOAD_ROOMS_FAILURE,
-  CREATE_ROOM_REQUEST, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
+  CREATE_ROOM_SUBSCRIBE, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
   GET_CURRENT_ROOM,
   ADD_STARRED, REMOVE_STARRED,
 } from './types'
@@ -36,14 +36,13 @@ const roomReducer = (state = initialState, action) => {
         draft.loadRoomsLoading = false;
         draft.loadRoomsError = action.error;
         break;
-      case CREATE_ROOM_REQUEST:
+      case CREATE_ROOM_SUBSCRIBE:
         draft.createRoomLoading = true;
         draft.createRoomDone = false;
         draft.createRoomError = null;
         break;
       case CREATE_ROOM_SUCCESS:
         draft.roomList.push(action.data.room)
-        draft.currentRoom = action.data.room;
         draft.createRoomLoading = false;
         draft.createRoomDone = true;
         break;

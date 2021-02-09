@@ -1,22 +1,21 @@
 import React, { useCallback } from 'react'
 import { Form, Input, Button, Space } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { SEND_CHAT_REQUEST } from '../../reducers/types';
+import { useSelector } from 'react-redux'
+
+import { sendChat } from '../../util/socket';
 
 function Sender() {
 
-  const dispatch = useDispatch();
+  const { currentUser } = useSelector(state => state.user)
   const { currentRoom } = useSelector(state => state.room)
   const [form] = Form.useForm();
 
   const onFinish = useCallback((values) => {
     if (!values.content?.trim()) return;
-    dispatch({
-      type: SEND_CHAT_REQUEST,
-      data: {
-        room: currentRoom._id,
-        content: values.content,
-      }
+    sendChat({
+      room: currentRoom._id,
+      content: values.content,
+      writer: currentUser._id
     })
     form.resetFields();
   }, [currentRoom])
@@ -29,11 +28,11 @@ function Sender() {
         onFinish={onFinish}
       >
         <Form.Item name="content">
-          <Input.TextArea placeholder="메세지" />
+          <Input.TextArea placeholder="메세지" disabled={!currentUser._id} />
         </Form.Item>
         <Form.Item>
           <Space style={{ float: 'right' }}>
-            <Button type="primary" htmlType="submit" >
+            <Button type="primary" htmlType="submit" disabled={!currentUser._id} >
               전송
             </Button>
           </Space>

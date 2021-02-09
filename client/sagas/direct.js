@@ -4,7 +4,7 @@ import axios from "axios";
 import {
   LOAD_DIRECT_CANDIDATE_REQUEST, LOAD_DIRECT_CANDIDATE_SUCCESS, LOAD_DIRECT_CANDIDATE_FAILURE,
   LOAD_DIRECTS_REQUEST, LOAD_DIRECTS_SUCCESS, LOAD_DIRECTS_FAILURE,
-  ADD_DIRECT_REQUEST, ADD_DIRECT_SUCCESS, ADD_DIRECT_FAILURE,
+  CREATE_DIRECT_SUBSCRIBE, CREATE_DIRECT_SUCCESS, CREATE_DIRECT_FAILURE,
 } from '../reducers/types'
 
 function loadDirectCandidateAPI() {
@@ -49,22 +49,17 @@ function* loadDirects() {
   }
 }
 
-function addDirectAPI(data) {
-  return axios.post('/direct', data)
-}
-
 function* addDirect(action) {
-  try {
-    const result = yield call(addDirectAPI, action.data)
+  if (!action.error) {
     yield put({
-      type: ADD_DIRECT_SUCCESS,
-      data: result.data
+      type: CREATE_DIRECT_SUCCESS,
+      data: action.data
     })
-  } catch (error) {
-    console.error(error)
+  } else {
+    console.error(action.error)
     yield put({
-      type: ADD_DIRECT_FAILURE,
-      error: error.response.data
+      type: CREATE_DIRECT_FAILURE,
+      error: action.error
     })
   }
 }
@@ -78,7 +73,7 @@ function* watchLoadDirects() {
 }
 
 function* watchAddDirect() {
-  yield takeLatest(ADD_DIRECT_REQUEST, addDirect)
+  yield takeLatest(CREATE_DIRECT_SUBSCRIBE, addDirect)
 }
 
 

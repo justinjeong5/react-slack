@@ -14,6 +14,7 @@ function Menu() {
       height: '100vh',
       color: 'white',
       minWidth: '300px',
+      overflowY: 'scroll'
     }}>
       <div style={{ margin: '10px' }}>
         <UserPanel />

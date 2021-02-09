@@ -1,7 +1,7 @@
 import produce from 'immer'
 import {
   LOAD_CHATS_REQUEST, LOAD_CHATS_SUCCESS, LOAD_CHATS_FAILURE,
-  SEND_CHAT_REQUEST, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
+  SEND_CHAT_SUBSCRIBE, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
   GET_CHATS_OF_ROOM,
 } from './types'
 
@@ -34,7 +34,7 @@ const chatReducer = (state = initialState, action) => {
         draft.loadChatsLoading = false;
         draft.loadChatsError = action.error;
         break;
-      case SEND_CHAT_REQUEST:
+      case SEND_CHAT_SUBSCRIBE:
         draft.sendChatLoading = true;
         draft.sendChatDone = false;
         draft.sendChatError = null;

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { END } from 'redux-saga'
 import axios from 'axios'
 import wrapper from '../store/configureStore'
@@ -6,9 +7,47 @@ import wrapper from '../store/configureStore'
 import Menu from '../components/Menu'
 import Main from '../components/Main'
 
-import { AUTH_USER_REQUEST, LOAD_ROOMS_REQUEST, LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST, LOAD_STARS_REQUEST } from '../reducers/types'
+import {
+  AUTH_USER_REQUEST, LOAD_ROOMS_REQUEST,
+  LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST, LOAD_STARS_REQUEST,
+  SOCKET_CONNECT, SOCKET_DISCONNECT,
+  SEND_CHAT_SUBSCRIBE, CREATE_ROOM_SUBSCRIBE, CREATE_DIRECT_SUBSCRIBE,
+} from '../reducers/types'
+import { subscribeChat, subscribeRoom, subscribeDirect } from '../util/socket'
 
 function Home() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: SOCKET_CONNECT
+    })
+    subscribeChat((error, message) => {
+      dispatch({
+        type: SEND_CHAT_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribeRoom((error, message) => {
+      dispatch({
+        type: CREATE_ROOM_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribeDirect((error, message) => {
+      dispatch({
+        type: CREATE_DIRECT_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    return () => {
+      dispatch({
+        type: SOCKET_DISCONNECT
+      })
+    }
+  }, [])
+
   return (
     <div style={{ display: 'flex' }}>
       <Menu />

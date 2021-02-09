@@ -7,6 +7,7 @@ import direct from './direct'
 import chat from './chat'
 import image from './image'
 import star from './star'
+import socket from './socket'
 
 
 const rootReducer = (state, action) => {
@@ -21,6 +22,7 @@ const rootReducer = (state, action) => {
         chat,
         image,
         star,
+        socket,
       });
       return combinedReducer(state, action);
     }

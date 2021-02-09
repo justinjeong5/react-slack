@@ -3,7 +3,7 @@ import axios from "axios";
 
 import {
   LOAD_ROOMS_REQUEST, LOAD_ROOMS_SUCCESS, LOAD_ROOMS_FAILURE,
-  CREATE_ROOM_REQUEST, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
+  CREATE_ROOM_SUBSCRIBE, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
 } from '../reducers/types'
 
 function loadRoomsAPI() {
@@ -26,22 +26,17 @@ function* loadRooms() {
   }
 }
 
-function createRoomAPI(data) {
-  return axios.post('/room', data)
-}
-
 function* createRoom(action) {
-  try {
-    const result = yield call(createRoomAPI, action.data)
+  if (!action.error) {
     yield put({
       type: CREATE_ROOM_SUCCESS,
-      data: result.data
+      data: action.data
     })
-  } catch (error) {
-    console.error(error)
+  } else {
+    console.error(action.error)
     yield put({
       type: CREATE_ROOM_FAILURE,
-      error: error.response.data
+      error: action.error
     })
   }
 }
@@ -51,7 +46,7 @@ function* watchLoadRooms() {
 }
 
 function* watchCreateRoom() {
-  yield takeLatest(CREATE_ROOM_REQUEST, createRoom)
+  yield takeLatest(CREATE_ROOM_SUBSCRIBE, createRoom)
 }
 
 

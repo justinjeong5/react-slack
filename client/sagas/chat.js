@@ -2,7 +2,7 @@ import { all, put, fork, call, takeLatest } from 'redux-saga/effects';
 import axios from 'axios'
 import {
   LOAD_CHATS_REQUEST, LOAD_CHATS_SUCCESS, LOAD_CHATS_FAILURE,
-  SEND_CHAT_REQUEST, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
+  SEND_CHAT_SUBSCRIBE, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
 } from '../reducers/types'
 
 function loadChatsAPI(data) {
@@ -25,22 +25,17 @@ function* loadChats(action) {
   }
 }
 
-function sendChatAPI(data) {
-  return axios.post('/chat', data)
-}
-
 function* sendChat(action) {
-  try {
-    const result = yield call(sendChatAPI, action.data);
+  if (!action.error) {
     yield put({
       type: SEND_CHAT_SUCCESS,
-      data: result.data
+      data: action.data
     })
-  } catch (error) {
-    console.error(error)
+  } else {
+    console.error(action.error)
     yield put({
       type: SEND_CHAT_FAILURE,
-      error: error.response.data
+      error: action.error
     })
   }
 }
@@ -50,7 +45,7 @@ function* watchLoadChats() {
 }
 
 function* watchSendChat() {
-  yield takeLatest(SEND_CHAT_REQUEST, sendChat)
+  yield takeLatest(SEND_CHAT_SUBSCRIBE, sendChat)
 }
 
 

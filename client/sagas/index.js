@@ -7,6 +7,7 @@ import directSaga from './direct'
 import chatSaga from './chat'
 import imageSaga from './image'
 import starSaga from './star'
+import socketSaga from './socket'
 
 import config from '../config/config';
 const env = process.env.NODE_ENV || 'development';
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     fork(chatSaga),
     fork(imageSaga),
     fork(starSaga),
+    fork(socketSaga),
   ])
 }
