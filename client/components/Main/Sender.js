@@ -1,20 +1,30 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Form, Input, Button, Space } from 'antd'
-import { useDispatch } from 'react-redux'
-
-import Uploader from './Sender/Uploader'
+import { useDispatch, useSelector } from 'react-redux'
+import { SEND_CHAT_REQUEST } from '../../reducers/types';
 
 function Sender() {
 
   const dispatch = useDispatch();
+  const { currentRoom } = useSelector(state => state.room)
+  const [form] = Form.useForm();
 
   const onFinish = useCallback((values) => {
-    console.log(values)
-  }, [])
+    if (!values.content?.trim()) return;
+    dispatch({
+      type: SEND_CHAT_REQUEST,
+      data: {
+        room: currentRoom._id,
+        content: values.content,
+      }
+    })
+    form.resetFields();
+  }, [currentRoom])
 
   return (
     <div>
       <Form
+        form={form}
         name="basic"
         onFinish={onFinish}
       >
