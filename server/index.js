@@ -61,8 +61,7 @@ io.on('connection', (socket) => {
             delete fullChat.writer.password;
             delete fullChat.writer.token;
 
-            io.emit('returnMessage', { chat: fullChat })
-            return console.log('submitMessage successful');
+            return io.emit('returnMessage', { chat: fullChat })
           })
       })
     })

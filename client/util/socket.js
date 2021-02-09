@@ -25,7 +25,6 @@ export const sendChat = (data) => {
   }
 }
 export const subscribeChat = (callback) => {
-  console.log('returnMessage')
   if (socket) socket.on('returnMessage', data => {
     if (data.error) return callback(data);
     return callback(null, data);
