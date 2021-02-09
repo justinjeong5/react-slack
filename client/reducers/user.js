@@ -1,5 +1,6 @@
 import produce from 'immer'
 import {
+  AUTH_USER_REQUEST, AUTH_USER_SUCCESS, AUTH_USER_FAILURE,
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
   LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
@@ -10,6 +11,9 @@ import {
 const initialState = {
   currentUser: {},
 
+  authUserDone: false,
+  authUserLoading: false,
+  authUserError: null,
   registerUserDone: false,
   registerUserLoading: false,
   registerUserError: null,
@@ -24,6 +28,20 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case AUTH_USER_REQUEST:
+        draft.authUserLoading = true;
+        draft.authUserDone = false;
+        draft.authUserError = null;
+        break;
+      case AUTH_USER_SUCCESS:
+        draft.currentUser = action.data.user;
+        draft.authUserLoading = false;
+        draft.authUserDone = true;
+        break;
+      case AUTH_USER_FAILURE:
+        draft.authUserLoading = false;
+        draft.authUserError = action.error;
+        break;
       case REGISTER_USER_REQUEST:
         draft.registerUserLoading = true;
         draft.registerUserDone = false;
@@ -73,6 +91,7 @@ const userReducer = (state = initialState, action) => {
         break;
       case RESET_USER_STORE:
         draft.loginUserDone = false;
+        break;
       default:
         break;
     }

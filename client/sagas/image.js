@@ -3,7 +3,6 @@ import axios from 'axios'
 
 import {
   UPLOAD_IMAGE_REQUEST, UPLOAD_IMAGE_SUCCESS, UPLOAD_IMAGE_FAILURE,
-  CHANGE_USER_IMAGE,
 } from '../reducers/types'
 
 function uploadImageAPI(data) {
@@ -12,20 +11,16 @@ function uploadImageAPI(data) {
 
 function* uploadImage(action) {
   try {
-    yield call(uploadImageAPI, action.data)
+    const result = yield call(uploadImageAPI, action.data)
     yield put({
       type: UPLOAD_IMAGE_SUCCESS,
-      data: { image: url }
-    })
-    yield put({
-      type: CHANGE_USER_IMAGE,
-      data: { image: url }
+      data: result.data
     })
   } catch (error) {
     console.error(error)
     yield put({
       type: UPLOAD_IMAGE_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
 }

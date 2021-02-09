@@ -1,6 +1,10 @@
 //==================================================
 //                      User
 //==================================================
+export const AUTH_USER_REQUEST = 'AUTH_USER_REQUEST';
+export const AUTH_USER_SUCCESS = 'AUTH_USER_SUCCESS';
+export const AUTH_USER_FAILURE = 'AUTH_USER_FAILURE';
+
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -15,6 +19,24 @@ export const LOGOUT_USER_FAILURE = 'LOGOUT_USER_FAILURE';
 
 export const CHANGE_USER_IMAGE = 'CHANGE_USER_IMAGE';
 export const RESET_USER_STORE = 'RESET_USER_STORE';
+
+
+//==================================================
+//                      Direct
+//==================================================
+export const LOAD_DIRECT_CANDIDATE_REQUEST = 'LOAD_DIRECT_CANDIDATE_REQUEST';
+export const LOAD_DIRECT_CANDIDATE_SUCCESS = 'LOAD_DIRECT_CANDIDATE_SUCCESS';
+export const LOAD_DIRECT_CANDIDATE_FAILURE = 'LOAD_DIRECT_CANDIDATE_FAILURE';
+
+export const LOAD_DIRECTS_REQUEST = 'LOAD_DIRECTS_REQUEST';
+export const LOAD_DIRECTS_SUCCESS = 'LOAD_DIRECTS_SUCCESS';
+export const LOAD_DIRECTS_FAILURE = 'LOAD_DIRECTS_FAILURE';
+
+export const ADD_DIRECT_REQUEST = 'ADD_DIRECT_REQUEST';
+export const ADD_DIRECT_SUCCESS = 'ADD_DIRECT_SUCCESS';
+export const ADD_DIRECT_FAILURE = 'ADD_DIRECT_FAILURE';
+
+export const RESET_DIRECT_STORE = 'RESET_DIRECT_STORE';
 
 
 //==================================================
@@ -38,6 +60,17 @@ export const ADD_STAR_REQUEST = 'ADD_STAR_REQUEST';
 export const ADD_STAR_SUCCESS = 'ADD_STAR_SUCCESS';
 export const ADD_STAR_FAILURE = 'ADD_STAR_FAILURE';
 
+export const REMOVE_STAR_REQUEST = 'REMOVE_STAR_REQUEST';
+export const REMOVE_STAR_SUCCESS = 'REMOVE_STAR_SUCCESS';
+export const REMOVE_STAR_FAILURE = 'REMOVE_STAR_FAILURE';
+
+export const LOAD_STARS_REQUEST = 'LOAD_STARS_REQUEST';
+export const LOAD_STARS_SUCCESS = 'LOAD_STARS_SUCCESS';
+export const LOAD_STARS_FAILURE = 'LOAD_STARS_FAILURE';
+
+export const ADD_STARRED = 'ADD_STARRED';
+export const REMOVE_STARRED = 'REMOVE_STARRED';
+export const RESET_STAR_STORE = 'RESET_STAR_STORE';
 
 //==================================================
 //                      Chat

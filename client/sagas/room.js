@@ -15,15 +15,13 @@ function* loadRooms() {
     const result = yield call(loadRoomsAPI)
     yield put({
       type: LOAD_ROOMS_SUCCESS,
-      data: {
-        rooms: result.data
-      }
+      data: result.data
     })
   } catch (error) {
     console.error(error)
     yield put({
       type: LOAD_ROOMS_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
 }
@@ -37,15 +35,13 @@ function* createRoom(action) {
     const result = yield call(createRoomAPI, action.data)
     yield put({
       type: CREATE_ROOM_SUCCESS,
-      data: {
-        room: result.data
-      }
+      data: result.data
     })
   } catch (error) {
     console.error(error)
     yield put({
       type: CREATE_ROOM_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
 }

@@ -3,8 +3,8 @@ import { combineReducers } from 'redux'
 
 import user from './user'
 import room from './room'
+import direct from './direct'
 import chat from './chat'
-import users from './users'
 import image from './image'
 import star from './star'
 
@@ -17,8 +17,8 @@ const rootReducer = (state, action) => {
       const combinedReducer = combineReducers({
         user,
         room,
+        direct,
         chat,
-        users,
         image,
         star,
       });

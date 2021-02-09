@@ -3,6 +3,7 @@ import {
   LOAD_ROOMS_REQUEST, LOAD_ROOMS_SUCCESS, LOAD_ROOMS_FAILURE,
   CREATE_ROOM_REQUEST, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
   GET_CURRENT_ROOM,
+  ADD_STARRED, REMOVE_STARRED,
 } from './types'
 
 const initialState = {
@@ -26,12 +27,8 @@ const roomReducer = (state = initialState, action) => {
         draft.loadRoomsError = null;
         break;
       case LOAD_ROOMS_SUCCESS:
-        if (action.data.room) {
-          draft.roomList.unshift(action.data.room);
-          if (!draft.currentRoom.id) {
-            draft.currentRoom = action.data.room;
-          }
-        }
+        draft.roomList = action.data.rooms;
+        draft.currentRoom = action.data.rooms[0] || {};
         draft.loadRoomsLoading = false;
         draft.loadRoomsDone = true;
         break;
@@ -45,6 +42,7 @@ const roomReducer = (state = initialState, action) => {
         draft.createRoomError = null;
         break;
       case CREATE_ROOM_SUCCESS:
+        draft.roomList.push(action.data.room)
         draft.currentRoom = action.data.room;
         draft.createRoomLoading = false;
         draft.createRoomDone = true;
@@ -54,16 +52,15 @@ const roomReducer = (state = initialState, action) => {
         draft.createRoomError = action.error;
         break;
       case GET_CURRENT_ROOM:
-        if (action.data.room.title) {
-          draft.currentRoom = action.data.room;
-        } else {
-          draft.currentRoom = {
-            id: action.data.room.uid,
-            title: action.data.room.nickname,
-            description: `${action.data.room.nickname}님과 대화하세요!`,
-            writer: action.data.room,
-          }
+        draft.currentRoom = action.data.room;
+        break;
+      case ADD_STARRED:
+      case REMOVE_STARRED:
+        const directIndex = draft.roomList.findIndex(room => room._id === action.data.star._id);
+        if (directIndex !== -1) {
+          draft.roomList[directIndex].starred = action.data.star.starred;
         }
+        draft.currentRoom.starred = action.data.star.starred;
         break;
       default:
         break;

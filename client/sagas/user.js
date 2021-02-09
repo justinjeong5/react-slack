@@ -3,13 +3,34 @@ import axios from 'axios';
 import md5 from 'md5'
 
 import {
+  AUTH_USER_REQUEST, AUTH_USER_SUCCESS, AUTH_USER_FAILURE,
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
   LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
 } from '../reducers/types'
 
+function authAPI() {
+  return axios.get('/user/auth')
+}
+
+function* auth() {
+  try {
+    const result = yield call(authAPI);
+    yield put({
+      type: AUTH_USER_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    console.error(error)
+    yield put({
+      type: AUTH_USER_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
 function registerAPI(data) {
-  return axios.post('/user', data)
+  return axios.post('/user/register', data)
 }
 
 function* register(action) {
@@ -18,18 +39,17 @@ function* register(action) {
       ...action.data,
       image: `https://gravatar.com/avatar/${md5(action.data.email)}?d=identicon`
     }
-    const result = yield call(registerAPI, data);
+    yield call(registerAPI, data);
+    const loginResult = yield call(loginAPI, data);
     yield put({
       type: REGISTER_USER_SUCCESS,
-      data: {
-        user: result.data
-      }
+      data: loginResult.data
     })
   } catch (error) {
     console.error(error)
     yield put({
       type: REGISTER_USER_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
 }
@@ -43,26 +63,24 @@ function* login(action) {
     const result = yield call(loginAPI, action.data);
     yield put({
       type: LOGIN_USER_SUCCESS,
-      data: {
-        user: result.data
-      }
+      data: result.data
     })
   } catch (error) {
     console.error(error)
     yield put({
       type: LOGIN_USER_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
 }
 
-function logoutAPI() {
-  return axios.get('/user/logout')
+function logoutAPI(data) {
+  return axios.patch('/user/logout', data)
 }
 
-function* logout() {
+function* logout(action) {
   try {
-    yield call(logoutAPI);
+    yield call(logoutAPI, action.data);
     yield put({
       type: LOGOUT_USER_SUCCESS,
     })
@@ -70,9 +88,13 @@ function* logout() {
     console.error(error)
     yield put({
       type: LOGOUT_USER_FAILURE,
-      error: error
+      error: error.response.data
     })
   }
+}
+
+function* watchAuth() {
+  yield takeLatest(AUTH_USER_REQUEST, auth)
 }
 
 function* watchRegister() {
@@ -90,6 +112,7 @@ function* watchLogout() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchAuth),
     fork(watchRegister),
     fork(watchLogin),
     fork(watchLogout),

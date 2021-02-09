@@ -26,7 +26,7 @@ const chatReducer = (state = initialState, action) => {
         draft.loadChatsError = null;
         break;
       case LOAD_CHATS_SUCCESS:
-        draft.chatList.unshift(action.data.chat);
+        draft.chatList = action.data.chats;
         draft.loadChatsLoading = false;
         draft.loadChatsDone = true;
         break;
@@ -40,6 +40,8 @@ const chatReducer = (state = initialState, action) => {
         draft.sendChatError = null;
         break;
       case SEND_CHAT_SUCCESS:
+        draft.chatList.push(action.data.chat)
+        draft.currentChats.push(action.data.chat)
         draft.sendChatLoading = false;
         draft.sendChatDone = true;
         break;
@@ -48,9 +50,9 @@ const chatReducer = (state = initialState, action) => {
         draft.sendChatError = action.error;
         break;
       case GET_CHATS_OF_ROOM:
-        draft.currentChats = draft.chatList.filter(chat => (
-          chat.id === action.data.roomId
-        ))
+        draft.currentChats = draft.chatList.filter(chat =>
+          chat.room === action.data.roomId
+        )
         break;
       default:
         break;
