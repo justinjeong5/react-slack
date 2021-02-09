@@ -51,6 +51,9 @@ const chatReducer = (state = initialState, action) => {
         break;
       case SEND_CHAT_SUCCESS:
         draft.chatList.push(action.data.chat)
+        if (!draft.readCount[action.data.chat.room]) {
+          draft.readCount[action.data.chat.room] = { read: 0, count: 0 }
+        }
         draft.readCount[action.data.chat.room].count++;
         if (draft.currentRoomId === action.data.chat.room) {
           draft.currentChats.push(action.data.chat)
