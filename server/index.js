@@ -8,6 +8,7 @@ const morgan = require('morgan')
 const app = express();
 
 const { Chat } = require('./models/Chat')
+const { User } = require('./models/User')
 const { Room } = require('./models/Room')
 const { Direct } = require('./models/Direct')
 
@@ -115,6 +116,34 @@ io.on('connection', (socket) => {
             return io.emit('returnDirect', { direct: fullDirect })
           })
       })
+    })
+  })
+
+  socket.on('submitPresence', (data) => {
+    connect.then(database => {
+      User.findOneAndUpdate({ _id: data.userId },
+        { presence: true },
+        (error, doc) => {
+          if (error) {
+            console.error(error);
+            return io.emit('SocketError', { message: '접속중 상태를 저장하는 과정에서 문제가 발생했습니다.', error })
+          }
+          return io.emit('returnPresence', { userId: data.userId })
+        })
+    })
+  })
+
+  socket.on('submitAbsence', (data) => {
+    connect.then(database => {
+      User.findOneAndUpdate({ _id: data.userId },
+        { presence: false },
+        (error, doc) => {
+          if (error) {
+            console.error(error);
+            return io.emit('SocketError', { message: '접속중 상태를 저장하는 과정에서 문제가 발생했습니다.', error })
+          }
+          return io.emit('returnAbsence', { userId: data.userId })
+        })
     })
   })
 })
