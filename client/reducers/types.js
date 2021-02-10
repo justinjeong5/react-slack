@@ -123,3 +123,15 @@ export const UPLOAD_IMAGE_FAILURE = 'UPLOAD_IMAGE_FAILURE';
 //==================================================
 export const SOCKET_CONNECT = 'SOCKET_CONNECT';
 export const SOCKET_DISCONNECT = 'SOCKET_DISCONNECT';
+
+
+//==================================================
+//                      Typing
+//==================================================
+export const TYPING_START_SUBSCRIBE = 'TYPING_START_SUBSCRIBE';
+export const TYPING_START_SUCCESS = 'TYPING_START_SUCCESS';
+export const TYPING_START_FAILURE = 'TYPING_START_FAILURE';
+
+export const TYPING_FINISH_SUBSCRIBE = 'TYPING_FINISH_SUBSCRIBE';
+export const TYPING_FINISH_SUCCESS = 'TYPING_FINISH_SUCCESS';
+export const TYPING_FINISH_FAILURE = 'TYPING_FINISH_FAILURE';

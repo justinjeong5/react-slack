@@ -13,8 +13,12 @@ import {
   SOCKET_CONNECT, SOCKET_DISCONNECT,
   SEND_CHAT_SUBSCRIBE, CREATE_ROOM_SUBSCRIBE, CREATE_DIRECT_SUBSCRIBE,
   PRESENCE_USER_SUBSCRIBE, ABSENCE_USER_SUBSCRIBE, LOAD_PRESENCES_REQUEST,
+  TYPING_START_SUBSCRIBE, TYPING_FINISH_SUBSCRIBE,
 } from '../reducers/types'
-import { subscribeChat, subscribeRoom, subscribeDirect, subscribePresence, subscribeAbsence } from '../util/socket'
+import {
+  subscribeChat, subscribeRoom, subscribeDirect, subscribePresence,
+  subscribeAbsence, subscribeTypingStart, subscribeTypingFinish
+} from '../util/socket'
 
 function Home() {
 
@@ -39,6 +43,18 @@ function Home() {
     subscribeAbsence((error, message) => {
       dispatch({
         type: ABSENCE_USER_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribeTypingStart((error, message) => {
+      dispatch({
+        type: TYPING_START_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribeTypingFinish((error, message) => {
+      dispatch({
+        type: TYPING_FINISH_SUBSCRIBE,
         data: error || message
       })
     })

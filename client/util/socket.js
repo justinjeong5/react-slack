@@ -78,3 +78,27 @@ export const subscribeAbsence = (callback) => {
     return callback(null, data);
   });
 }
+
+export const sendTypingStart = (data) => {
+  if (socket) {
+    socket.emit('submitTypingStart', data)
+  }
+}
+export const subscribeTypingStart = (callback) => {
+  if (socket) socket.on('returnTypingStart', data => {
+    if (data.error) return callback(data);
+    return callback(null, data);
+  });
+}
+
+export const sendTypingFinish = (data) => {
+  if (socket) {
+    socket.emit('submitTypingFinish', data)
+  }
+}
+export const subscribeTypingFinish = (callback) => {
+  if (socket) socket.on('returnTypingFinish', data => {
+    if (data.error) return callback(data);
+    return callback(null, data);
+  });
+}

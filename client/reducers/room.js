@@ -2,6 +2,8 @@ import produce from 'immer'
 import {
   LOAD_ROOMS_REQUEST, LOAD_ROOMS_SUCCESS, LOAD_ROOMS_FAILURE,
   CREATE_ROOM_SUBSCRIBE, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE,
+  TYPING_START_SUBSCRIBE, TYPING_START_SUCCESS, TYPING_START_FAILURE,
+  TYPING_FINISH_SUBSCRIBE, TYPING_FINISH_SUCCESS, TYPING_FINISH_FAILURE,
   GET_CURRENT_ROOM,
   ADD_STARRED, REMOVE_STARRED,
 } from './types'
@@ -16,6 +18,12 @@ const initialState = {
   createRoomDone: false,
   createRoomLoading: false,
   createRoomError: null,
+  typingStartLoading: false,
+  typingStartDone: false,
+  typingStartError: null,
+  typingFinishLoading: false,
+  typingFinishDone: false,
+  typingFinishError: null,
 }
 
 const roomReducer = (state = initialState, action) => {
@@ -49,6 +57,46 @@ const roomReducer = (state = initialState, action) => {
       case CREATE_ROOM_FAILURE:
         draft.createRoomLoading = false;
         draft.createRoomError = action.error;
+        break;
+      case TYPING_START_SUBSCRIBE:
+        draft.typingStartLoading = true;
+        draft.typingStartDone = false;
+        draft.typingStartError = null;
+        break;
+      case TYPING_START_SUCCESS: {
+        if (draft.currentRoom._id === action.data.room) {
+          const currentIndex = draft.currentRoom.typing.findIndex(cur => cur?.userId === action.data.user.userId);
+          if (currentIndex === -1) {
+            draft.currentRoom.typing.push(action.data.user)
+          }
+        }
+        draft.typingStartLoading = false;
+        draft.typingStartDone = true;
+        break;
+      }
+      case TYPING_START_FAILURE:
+        draft.typingStartLoading = false;
+        draft.typingStartError = action.error;
+        break;
+      case TYPING_FINISH_SUBSCRIBE:
+        draft.typingFisnishLoading = true;
+        draft.typingFisnishDone = false;
+        draft.typingFisnishError = null;
+        break;
+      case TYPING_FINISH_SUCCESS: {
+        if (draft.currentRoom._id === action.data.room) {
+          const currentIndex = draft.currentRoom.typing.findIndex(cur => cur.userId === action.data.userId);
+          if (currentIndex !== -1) {
+            draft.currentRoom.typing.splice(currentIndex, 1)
+          }
+        }
+        draft.typingFisnishLoading = false;
+        draft.typingFisnishDone = true;
+        break;
+      }
+      case TYPING_FINISH_FAILURE:
+        draft.typingFisnishLoading = false;
+        draft.typingFisnishError = action.error;
         break;
       case GET_CURRENT_ROOM:
         draft.currentRoom = action.data.room;

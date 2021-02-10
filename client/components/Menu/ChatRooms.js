@@ -32,9 +32,11 @@ function ChatRooms() {
     if (roomList.length) {
       dispatch({
         type: GET_CURRENT_ROOM,
-        data: {
-          room: roomList[0]
-        }
+        data: { room: roomList[0] }
+      })
+      dispatch({
+        type: GET_CHATS_OF_ROOM,
+        data: { roomId: roomList[0]._id }
       })
     }
   }, [createRoomDone])

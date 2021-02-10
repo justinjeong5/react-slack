@@ -11,6 +11,7 @@ function Messages() {
   let messagesBottomRef = useRef();
   const { currentUser } = useSelector(state => state.user)
   const { currentChats } = useSelector(state => state.chat)
+  const { currentRoom } = useSelector(state => state.room)
 
   const cardTitle = useCallback((chat) => (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -49,15 +50,25 @@ function Messages() {
   ), [])
 
   return (
-    <div style={{ height: 'calc(100vh - 400px)', overflowY: 'scroll', border: '3px #f3f3f3 solid' }}>
-      {currentChats.map(chat => (
-        isMessageMine(chat)
-          ? renderMyMessage(chat)
-          : renderMessage(chat))
-      )}
-      {currentChats.length === 0 && <Empty description='대화를 시작해보세요!' style={{ marginTop: 100 }} />}
-      <div ref={node => messagesBottomRef = node}></div>
-    </div >
+    <div>
+      <div style={{ height: 'calc(100vh - 400px)', overflowY: 'scroll', border: '3px #f3f3f3 solid' }}>
+        {currentChats.map(chat => (
+          isMessageMine(chat)
+            ? renderMyMessage(chat)
+            : renderMessage(chat))
+        )}
+
+        {currentChats.length === 0 && <Empty description='대화를 시작해보세요!' style={{ marginTop: 100 }} />}
+        <div ref={node => messagesBottomRef = node}></div>
+      </div>
+      <div style={{ height: 15 }}>
+        {currentRoom.typing?.length > 0 && (
+          currentRoom.typing.length === 1
+            ? `${currentRoom.typing[0].nickname}님이 대화를 입력하고 있습니다.`
+            : `${currentRoom.typing[0].nickname}님 외 ${currentRoom.typing.length - 1}명이 대화를 입력하고 있습니다.`
+        )}
+      </div>
+    </div>
   )
 }
 

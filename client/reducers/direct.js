@@ -33,6 +33,7 @@ export const userParser = (direct, userId) => {
     title: target.nickname,
     private: true,
     starred: direct.starred,
+    typing: direct.typing,
     description: `${target.nickname}님과 대화하세요!`,
     writer: target,
   }
