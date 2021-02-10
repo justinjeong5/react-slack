@@ -61,7 +61,6 @@ io.on('connection', (socket) => {
             const fullChat = chat.toJSON();
             delete fullChat.writer.password;
             delete fullChat.writer.token;
-
             return io.emit('returnMessage', { chat: fullChat })
           })
       })
@@ -143,6 +142,82 @@ io.on('connection', (socket) => {
             return io.emit('SocketError', { message: '접속중 상태를 저장하는 과정에서 문제가 발생했습니다.', error })
           }
           return io.emit('returnAbsence', { userId: data.userId })
+        })
+    })
+  })
+
+  socket.on('submitTypingStart', (data) => {
+    connect.then(database => {
+      Room.findOne({ _id: data.room },
+        (error, room) => {
+          if (error) {
+            console.error(error);
+            return io.emit('SocketError', { message: '타이핑 시작을 중복검사 하는 과정에서 문제가 발생했습니다.', error })
+          }
+          if (!room) {
+            Direct.findOne({ _id: data.room },
+              (error, room) => {
+                if (error) {
+                  console.error(error);
+                  return io.emit('SocketError', { message: '타이핑 시작을 중복검사 하는 과정에서 문제가 발생했습니다.', error })
+                }
+                const duplicate = room.typing.findIndex(user => user.userId === data.user.userId);
+                if (duplicate === -1) {
+                  Direct.findOneAndUpdate({ _id: data.room },
+                    { $push: { typing: data.user } },
+                    { new: true },
+                    (error, doc) => {
+                      if (error) {
+                        console.error(error);
+                        return io.emit('SocketError', { message: '타이핑 시작을 저장하는 과정에서 문제가 발생했습니다.', error })
+                      }
+                      const user = doc._doc.typing.filter(user => user.userId === data.user.userId)[0];
+                      return io.emit('returnTypingStart', { user, room: data.room })
+                    })
+                }
+              })
+          } else {
+            const duplicate = room.typing.findIndex(user => user.userId === data.user.userId);
+            if (duplicate === -1) {
+              Room.findOneAndUpdate({ _id: data.room },
+                { $push: { typing: data.user } },
+                { new: true },
+                (error, doc) => {
+                  if (error) {
+                    console.error(error);
+                    return io.emit('SocketError', { message: '타이핑 시작을 저장하는 과정에서 문제가 발생했습니다.', error })
+                  }
+                  const user = doc._doc.typing.filter(user => user.userId === data.user.userId)[0];
+                  return io.emit('returnTypingStart', { user, room: data.room })
+                })
+            }
+          }
+        })
+    })
+  })
+
+  socket.on('submitTypingFinish', (data) => {
+    connect.then(database => {
+      Room.findOneAndUpdate({ _id: data.room },
+        { $pull: { typing: { userId: data.userId } } },
+        (error, doc) => {
+          if (error) {
+            console.error(error);
+            return io.emit('SocketError', { message: '타이핑 완료를 저장하는 과정에서 문제가 발생했습니다.', error })
+          }
+          if (!doc) {
+            Direct.findOneAndUpdate({ _id: data.room },
+              { $pull: { typing: { userId: data.userId } } },
+              (error, doc) => {
+                if (error) {
+                  console.error(error);
+                  return io.emit('SocketError', { message: '타이핑 완료를 저장하는 과정에서 문제가 발생했습니다.', error })
+                }
+                return io.emit('returnTypingFinish', { userId: data.userId, room: data.room })
+              })
+          } else {
+            return io.emit('returnTypingFinish', { userId: data.userId, room: data.room })
+          }
         })
     })
   })

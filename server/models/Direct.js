@@ -14,6 +14,10 @@ const directSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  typing: {
+    type: Array,
+    default: [],
+  },
 }, { timestamps: true })
 
 const Direct = mongoose.model('Direct', directSchema)

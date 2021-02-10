@@ -16,6 +16,10 @@ const roomSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  typing: {
+    type: Array,
+    default: [],
+  },
 }, { timestamps: true })
 
 const Room = mongoose.model('Room', roomSchema)
