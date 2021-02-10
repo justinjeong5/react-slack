@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { Card, Image, Empty } from 'antd'
 
-import { GET_CHATS_OF_ROOM } from '../../reducers/types'
 moment.locale('ko')
 
 function Messages() {
 
   let messagesBottomRef = useRef();
-  const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user)
-  const { currentRoom } = useSelector(state => state.room)
   const { currentChats } = useSelector(state => state.chat)
 
   const cardTitle = useCallback((chat) => (
