@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from 'uuid'
-import { Select, Modal, Button } from 'antd'
+import { Select, Modal, Button, Badge } from 'antd'
 import { FormOutlined, } from '@ant-design/icons'
 
 import { LOAD_DIRECT_CANDIDATE_REQUEST } from '../../../reducers/types'
@@ -13,7 +13,8 @@ function ModalForm({ showModal, handleShow }) {
   const dispatch = useDispatch();
   const [newDirect, setNewDirect] = useState('')
   const { currentUser } = useSelector(state => state.user)
-  const { directList, currentDirect, createDirectLoading } = useSelector(state => state.direct)
+  const { currentDirect, createDirectLoading } = useSelector(state => state.direct)
+  const { presentUsers } = useSelector(state => state.presence)
 
   const handleChange = useCallback((value) => {
     setNewDirect(value);
@@ -28,18 +29,18 @@ function ModalForm({ showModal, handleShow }) {
   }, [newDirect, currentUser])
 
   useEffect(() => {
-    if (showModal && directList.length === 0)
+    if (showModal && presentUsers.length === 0)
       dispatch({
         type: LOAD_DIRECT_CANDIDATE_REQUEST
       })
-  }, [showModal, directList])
+  }, [showModal, presentUsers])
 
   const renderList = useCallback(() => (
-    directList
+    presentUsers
       .filter(v1 => v1._id !== currentUser._id)
       .filter(v2 => (currentDirect.findIndex(v3 => v3.writer._id === v2._id) === -1))
-      .map(v4 => <Select.Option key={v4._id}>{v4.nickname}</Select.Option>)
-  ), [directList, currentDirect])
+      .map(v4 => <Select.Option key={v4._id}>{`${v4.nickname} `}<Badge color={v4.presence ? 'green' : 'gray'} /></Select.Option>)
+  ), [presentUsers, currentDirect])
 
   return (
     <Modal

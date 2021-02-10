@@ -12,8 +12,9 @@ import {
   LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST, LOAD_STARS_REQUEST,
   SOCKET_CONNECT, SOCKET_DISCONNECT,
   SEND_CHAT_SUBSCRIBE, CREATE_ROOM_SUBSCRIBE, CREATE_DIRECT_SUBSCRIBE,
+  PRESENCE_USER_SUBSCRIBE, ABSENCE_USER_SUBSCRIBE, LOAD_PRESENCES_REQUEST,
 } from '../reducers/types'
-import { subscribeChat, subscribeRoom, subscribeDirect } from '../util/socket'
+import { subscribeChat, subscribeRoom, subscribeDirect, subscribePresence, subscribeAbsence } from '../util/socket'
 
 function Home() {
 
@@ -26,6 +27,18 @@ function Home() {
     subscribeChat((error, message) => {
       dispatch({
         type: SEND_CHAT_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribePresence((error, message) => {
+      dispatch({
+        type: PRESENCE_USER_SUBSCRIBE,
+        data: error || message
+      })
+    })
+    subscribeAbsence((error, message) => {
+      dispatch({
+        type: ABSENCE_USER_SUBSCRIBE,
         data: error || message
       })
     })
@@ -77,6 +90,9 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   })
   context.store.dispatch({
     type: LOAD_STARS_REQUEST
+  })
+  context.store.dispatch({
+    type: LOAD_PRESENCES_REQUEST
   })
 
   context.store.dispatch(END);

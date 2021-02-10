@@ -8,6 +8,7 @@ import chat from './chat'
 import image from './image'
 import star from './star'
 import socket from './socket'
+import presence from './presence'
 
 
 const rootReducer = (state, action) => {
@@ -23,6 +24,7 @@ const rootReducer = (state, action) => {
         image,
         star,
         socket,
+        presence,
       });
       return combinedReducer(state, action);
     }

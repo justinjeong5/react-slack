@@ -13,6 +13,7 @@ import {
   LOAD_ROOMS_REQUEST, LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST,
   LOAD_STARS_REQUEST, UPLOAD_IMAGE_REQUEST,
 } from '../../reducers/types'
+import { sendAbsence, sendPresence } from '../../util/socket'
 
 const { Title } = Typography;
 
@@ -20,7 +21,7 @@ function UserPanel() {
 
   const inputOpenImageRef = useRef();
   const dispatch = useDispatch();
-  const { currentUser, loginUserDone, logoutUserDone } = useSelector(state => state.user)
+  const { currentUser, loginUserDone, logoutUserDone, logoutUserLoading, registerUserDone } = useSelector(state => state.user)
   const { uploadImageLoading, uploadImageDone } = useSelector(state => state.image)
 
   useEffect(() => {
@@ -47,8 +48,23 @@ function UserPanel() {
         type: LOAD_STARS_REQUEST
       })
     }
-
   }, [loginUserDone])
+
+  useEffect(() => {
+    if (registerUserDone || loginUserDone) {
+      sendPresence({
+        userId: currentUser._id
+      })
+    }
+  }, [registerUserDone, loginUserDone])
+
+  useEffect(() => {
+    if (logoutUserLoading) {
+      sendAbsence({
+        userId: currentUser._id
+      })
+    }
+  }, [logoutUserLoading])
 
   useEffect(() => {
     if (logoutUserDone) {

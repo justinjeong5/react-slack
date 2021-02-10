@@ -54,3 +54,27 @@ export const subscribeDirect = (callback) => {
     return callback(null, data);
   });
 }
+
+export const sendPresence = (data) => {
+  if (socket) {
+    socket.emit('submitPresence', data)
+  }
+}
+export const subscribePresence = (callback) => {
+  if (socket) socket.on('returnPresence', data => {
+    if (data.error) return callback(data);
+    return callback(null, data);
+  });
+}
+
+export const sendAbsence = (data) => {
+  if (socket) {
+    socket.emit('submitAbsence', data)
+  }
+}
+export const subscribeAbsence = (callback) => {
+  if (socket) socket.on('returnAbsence', data => {
+    if (data.error) return callback(data);
+    return callback(null, data);
+  });
+}

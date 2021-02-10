@@ -22,6 +22,22 @@ export const RESET_USER_STORE = 'RESET_USER_STORE';
 
 
 //==================================================
+//                      Presence
+//==================================================
+export const LOAD_PRESENCES_REQUEST = 'LOAD_PRESENCES_REQUEST';
+export const LOAD_PRESENCES_SUCCESS = 'LOAD_PRESENCES_SUCCESS';
+export const LOAD_PRESENCES_FAILURE = 'LOAD_PRESENCES_FAILURE';
+
+export const PRESENCE_USER_SUBSCRIBE = 'PRESENCE_USER_SUBSCRIBE';
+export const PRESENCE_USER_SUCCESS = 'PRESENCE_USER_SUCCESS';
+export const PRESENCE_USER_FAILURE = 'PRESENCE_USER_FAILURE';
+
+export const ABSENCE_USER_SUBSCRIBE = 'ABSENCE_USER_SUBSCRIBE';
+export const ABSENCE_USER_SUCCESS = 'ABSENCE_USER_SUCCESS';
+export const ABSENCE_USER_FAILURE = 'ABSENCE_USER_FAILURE';
+
+
+//==================================================
 //                      Direct
 //==================================================
 export const LOAD_DIRECT_CANDIDATE_REQUEST = 'LOAD_DIRECT_CANDIDATE_REQUEST';
