@@ -13,7 +13,7 @@ function ModalForm({ showModal, handleShow }) {
   const dispatch = useDispatch();
   const [newDirect, setNewDirect] = useState('')
   const { currentUser } = useSelector(state => state.user)
-  const { directList, currentDirect } = useSelector(state => state.direct)
+  const { directList, currentDirect, createDirectLoading } = useSelector(state => state.direct)
 
   const handleChange = useCallback((value) => {
     setNewDirect(value);
@@ -47,8 +47,8 @@ function ModalForm({ showModal, handleShow }) {
       visible={showModal}
       onCancel={handleShow}
       width={400}
-      footer={[<Button key={uuidv4()} onClick={handleShow} >취소</Button>,
-      <Button key={uuidv4()} type='primary' onClick={handleSubmit} >MD 시작하기</Button>]}
+      footer={[<Button key={uuidv4()} onClick={handleShow} disabled={createDirectLoading}>취소</Button>,
+      <Button key={uuidv4()} type='primary' onClick={handleSubmit} loading={createDirectLoading} disabled={createDirectLoading}>MD 시작하기</Button>]}
     >
       <Select
         allowClear
