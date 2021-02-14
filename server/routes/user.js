@@ -1,8 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path')
 
 const { auth } = require('../middleware/auth')
 const { User } = require('../models/User')
+
+const multer = require('multer')
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk')
+
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: 'ap-northeast-2'
+})
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'slack.shinywaterjeong',
+    key(req, file, callback) {
+      callback(null, `user/${Date.now()}_${path.basename(file.originalname)}`)
+    }
+  }),
+  limits: { fileSize: 6 * 1024 * 1024 },  // 6MB
+})
 
 router.get('/auth', auth, (req, res) => {
   const { password, token, ...fullUser } = req.user._doc;
@@ -90,6 +111,20 @@ router.get('/users', auth, (req, res) => {
     })
     return res.status(200).json({ users: fullUsers })
   })
+})
+
+router.post('/image', auth, upload.single('image'), (req, res) => {
+  const imageUrl = req.file.location;
+
+  User.findOneAndUpdate({ _id: req.user._id },
+    { image: imageUrl },
+    (error, user) => {
+      if (error) {
+        console.error(error);
+        return res.status(400).json({ message: '사진을 저장하는 과정에서 문제가 발생했습니다.', error })
+      }
+      return res.status(200).json({ image: imageUrl, userId: req.user._id })
+    })
 })
 
 module.exports = router
