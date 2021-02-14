@@ -55,7 +55,7 @@ router.post('/login', (req, res) => {
             return res.status(400).json({ message: '토큰을 생성하는 과정에서 문제가 발생했습니다.', error })
           }
           const { password, token, ...fullUser } = user._doc;
-          return res.cookie(process.env.COOKIE_NAME, user.token).status(200).json({ user: fullUser })
+          return res.cookie(process.env.COOKIE_NAME, token).status(200).json({ user: fullUser })
         })
       })
     })
