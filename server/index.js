@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan')
+const hpp = require('hpp')
+const helmet = require('helmet')
 
 const app = express();
 
@@ -33,14 +35,25 @@ const connect = mongoose.connect(process.env.MONGO_URI, {
   console.error(error)
 })
 
-app.use(morgan('combined'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: true,
-  credentials: true,
-}));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'))
+  app.use(hpp());
+  app.use(helmet());
+  app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }))
+} else {
+  app.use(morgan('dev'))
+  app.use(cors({
+    origin: true,
+    credentials: true,
+  }))
+}
 
 io.on('connection', (socket) => {
   socket.on('submitMessage', (data) => {
