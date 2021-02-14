@@ -3,7 +3,7 @@ import {
   ADD_STAR_REQUEST, ADD_STAR_SUCCESS, ADD_STAR_FAILURE,
   REMOVE_STAR_REQUEST, REMOVE_STAR_SUCCESS, REMOVE_STAR_FAILURE,
   LOAD_STARS_REQUEST, LOAD_STARS_SUCCESS, LOAD_STARS_FAILURE,
-  RESET_STAR_STORE,
+  RESET_STAR_STORE, SET_USER_IMAGE_SUCCESS,
 } from './types'
 import { userParser } from './direct'
 
@@ -76,6 +76,14 @@ const StarReducer = (state = initialState, action) => {
         break;
       case RESET_STAR_STORE:
         draft.starList = [];
+        break;
+      case SET_USER_IMAGE_SUCCESS:
+        draft.starList = draft.starList.map(star => {
+          if (star.writer._id === action.data.userId) {
+            star.writer.image = action.data.image
+          }
+          return star;
+        })
         break;
       default:
         break;

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import mime from 'mime-types'
 import { Typography, Space, notification, Image, Dropdown, Menu, message } from 'antd'
 import { SlackOutlined, DownOutlined } from '@ant-design/icons'
 
@@ -11,7 +10,7 @@ import LogoutUser from './User/LogoutUser'
 import {
   RESET_USER_STORE, RESET_STAR_STORE, RESET_DIRECT_STORE,
   LOAD_ROOMS_REQUEST, LOAD_DIRECTS_REQUEST, LOAD_CHATS_REQUEST,
-  LOAD_STARS_REQUEST, UPLOAD_IMAGE_REQUEST,
+  LOAD_STARS_REQUEST, SET_USER_IMAGE_REQUEST,
 } from '../../reducers/types'
 import { sendAbsence, sendPresence } from '../../util/socket'
 
@@ -21,8 +20,8 @@ function UserPanel() {
 
   const inputOpenImageRef = useRef();
   const dispatch = useDispatch();
-  const { currentUser, loginUserDone, logoutUserDone, logoutUserLoading, registerUserDone } = useSelector(state => state.user)
-  const { uploadImageLoading, uploadImageDone } = useSelector(state => state.image)
+  const { currentUser, loginUserDone, logoutUserDone, logoutUserLoading, registerUserDone,
+    setUserImageLoading, setUserImageDone } = useSelector(state => state.user)
 
   useEffect(() => {
     if (loginUserDone) {
@@ -78,31 +77,28 @@ function UserPanel() {
   }, [logoutUserDone])
 
   useEffect(() => {
-    if (uploadImageLoading) {
+    if (setUserImageLoading) {
       notification.open({
         message: '프로필 사진 변경중',
         description: '프로필 사진을 변경하고 있습니다.'
       })
     }
-    if (uploadImageDone) {
+    if (setUserImageDone) {
       message.success('프로필 사진이 변경되었습니다.')
     }
-  }, [uploadImageLoading, uploadImageDone])
+  }, [setUserImageLoading, setUserImageDone])
 
   const handleUploadImageRef = () => {
     inputOpenImageRef.current.click();
   }
 
   const handleUploadImage = (event) => {
-    const file = event.target.files[0];
-    const metadata = { contentType: mime.lookup(file.name) };
+    const imageFormData = new FormData();
+    imageFormData.append('image', event.target.files[0])
+
     dispatch({
-      type: UPLOAD_IMAGE_REQUEST,
-      data: {
-        _id: currentUser._id,
-        file,
-        metadata
-      }
+      type: SET_USER_IMAGE_REQUEST,
+      data: imageFormData
     })
   }
 
@@ -127,7 +123,7 @@ function UserPanel() {
           src={currentUser.image} />
         <Dropdown
           overlay={<Menu>
-            <Menu.Item disabled={uploadImageLoading} onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
+            <Menu.Item disabled={setUserImageLoading} onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
           </Menu>}
           trigger={['click']}
         >

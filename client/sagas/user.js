@@ -7,6 +7,7 @@ import {
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
   LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
+  SET_USER_IMAGE_REQUEST, SET_USER_IMAGE_SUCCESS, SET_USER_IMAGE_FAILURE,
 } from '../reducers/types'
 
 function authAPI() {
@@ -93,6 +94,26 @@ function* logout(action) {
   }
 }
 
+function setImageAPI(data) {
+  return axios.post('/user/image', data)
+}
+
+function* setImage(action) {
+  try {
+    const result = yield call(setImageAPI, action.data);
+    yield put({
+      type: SET_USER_IMAGE_SUCCESS,
+      data: result.data
+    })
+  } catch (error) {
+    console.error(error)
+    yield put({
+      type: SET_USER_IMAGE_FAILURE,
+      error: error.response.data
+    })
+  }
+}
+
 function* watchAuth() {
   yield takeLatest(AUTH_USER_REQUEST, auth)
 }
@@ -109,6 +130,10 @@ function* watchLogout() {
   yield takeLatest(LOGOUT_USER_REQUEST, logout)
 }
 
+function* watchSetImage() {
+  yield takeLatest(SET_USER_IMAGE_REQUEST, setImage)
+}
+
 
 export default function* userSaga() {
   yield all([
@@ -116,5 +141,6 @@ export default function* userSaga() {
     fork(watchRegister),
     fork(watchLogin),
     fork(watchLogout),
+    fork(watchSetImage),
   ])
 }

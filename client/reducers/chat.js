@@ -2,7 +2,7 @@ import produce from 'immer'
 import {
   LOAD_CHATS_REQUEST, LOAD_CHATS_SUCCESS, LOAD_CHATS_FAILURE,
   SEND_CHAT_SUBSCRIBE, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE,
-  GET_CHATS_OF_ROOM, GET_CURRENT_ROOM,
+  GET_CHATS_OF_ROOM, GET_CURRENT_ROOM, SET_USER_IMAGE_SUCCESS,
 } from './types'
 
 const initialState = {
@@ -78,6 +78,20 @@ const chatReducer = (state = initialState, action) => {
         break;
       case GET_CURRENT_ROOM:
         draft.currentRoomId = action.data.room._id;
+        break;
+      case SET_USER_IMAGE_SUCCESS:
+        draft.chatList = draft.chatList.map(chat => {
+          if (chat.writer._id === action.data.userId) {
+            chat.writer.image = action.data.image
+          }
+          return chat;
+        });
+        draft.currentChats = draft.currentChats.map(chat => {
+          if (chat.writer._id === action.data.userId) {
+            chat.writer.image = action.data.image
+          }
+          return chat;
+        });
         break;
       default:
         break;

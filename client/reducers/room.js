@@ -6,6 +6,7 @@ import {
   TYPING_FINISH_SUBSCRIBE, TYPING_FINISH_SUCCESS, TYPING_FINISH_FAILURE,
   GET_CURRENT_ROOM,
   ADD_STARRED, REMOVE_STARRED,
+  SET_USER_IMAGE_SUCCESS,
 } from './types'
 
 const initialState = {
@@ -108,6 +109,17 @@ const roomReducer = (state = initialState, action) => {
           draft.roomList[directIndex].starred = action.data.star.starred;
         }
         draft.currentRoom.starred = action.data.star.starred;
+        break;
+      case SET_USER_IMAGE_SUCCESS:
+        if (draft.currentRoom.writer._id === action.data.userId) {
+          draft.currentRoom.writer.image = action.data.image
+        }
+        draft.roomList = draft.roomList.map(room => {
+          if (room.writer._id === action.data.userId) {
+            room.writer.image = action.data.image
+          }
+          return room;
+        })
         break;
       default:
         break;

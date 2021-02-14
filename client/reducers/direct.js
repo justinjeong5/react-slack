@@ -6,6 +6,7 @@ import {
   CREATE_DIRECT_SUBSCRIBE, CREATE_DIRECT_SUCCESS, CREATE_DIRECT_FAILURE,
   RESET_DIRECT_STORE,
   ADD_STARRED, REMOVE_STARRED,
+  SET_USER_IMAGE_SUCCESS,
 } from './types'
 
 const initialState = {
@@ -104,6 +105,14 @@ const directReducer = (state = initialState, action) => {
         if (directIndex !== -1) {
           draft.currentDirect[directIndex].starred = action.data.star.starred;
         }
+        break;
+      case SET_USER_IMAGE_SUCCESS:
+        draft.currentDirect = draft.currentDirect.map(direct => {
+          if (direct.writer._id === action.data.userId) {
+            direct.writer.image = action.data.image
+          }
+          return direct;
+        })
         break;
       default:
         break;

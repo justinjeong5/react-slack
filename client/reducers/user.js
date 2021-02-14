@@ -4,7 +4,7 @@ import {
   REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, REGISTER_USER_FAILURE,
   LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE,
   LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILURE,
-  CHANGE_USER_IMAGE,
+  SET_USER_IMAGE_REQUEST, SET_USER_IMAGE_SUCCESS, SET_USER_IMAGE_FAILURE,
   RESET_USER_STORE,
 } from './types'
 
@@ -23,6 +23,9 @@ const initialState = {
   logoutUserDone: false,
   logoutUserLoading: false,
   logoutUserError: null,
+  setUserImageDone: false,
+  setUserImageLoading: false,
+  setUserImageError: null,
 }
 
 const userReducer = (state = initialState, action) => {
@@ -86,8 +89,19 @@ const userReducer = (state = initialState, action) => {
         draft.logoutUserLoading = false;
         draft.logoutUserError = action.error;
         break;
-      case CHANGE_USER_IMAGE:
+      case SET_USER_IMAGE_REQUEST:
+        draft.setUserImageLoading = true;
+        draft.setUserImageDone = false;
+        draft.setUserImageError = null;
+        break;
+      case SET_USER_IMAGE_SUCCESS:
         draft.currentUser.image = action.data.image;
+        draft.setUserImageLoading = false;
+        draft.setUserImageDone = true;
+        break;
+      case SET_USER_IMAGE_FAILURE:
+        draft.setUserImageLoading = false;
+        draft.setUserImageError = action.error;
         break;
       case RESET_USER_STORE:
         draft.loginUserDone = false;
