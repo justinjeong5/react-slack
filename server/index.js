@@ -38,7 +38,7 @@ const connect = mongoose.connect(process.env.MONGO_URI, {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.SECRET_OR_PRIVATE_KEY));
 
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1)
