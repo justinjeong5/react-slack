@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "NODE_ENV=production pm2 start app.js"
+    "start": "NODE_ENV=production pm2 start index.js"
   },
   "author": "JustinJeong5",
   "license": "ISC",
