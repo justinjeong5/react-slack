@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const session = require('express-session')
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan')
@@ -18,7 +17,9 @@ const { Direct } = require('./models/Direct')
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: true,
+    origin: process.env.NODE_ENV === 'production'
+      ? process.env.CLIENT_URL
+      : true,
     credentials: true
   }
 })
@@ -56,16 +57,6 @@ if (process.env.NODE_ENV === 'production') {
     credentials: true,
   }))
 }
-app.use(session({
-  saveUninitialized: false,
-  resave: false,
-  secret: process.env.SECRET_OR_PRIVATE_KEY,
-  proxy: true,
-  cookie: {
-    httpOnly: true,
-    domain: process.env.NODE_ENV === 'production' && '.shinywaterjeong.com',
-  }
-}));
 
 io.on('connection', (socket) => {
   socket.on('submitMessage', (data) => {
