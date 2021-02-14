@@ -38,21 +38,6 @@ const connect = mongoose.connect(process.env.MONGO_URI, {
   console.error(error)
 })
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cookieParser(process.env.SECRET_OR_PRIVATE_KEY));
-app.use(session({
-  saveUninitialized: false,
-  resave: false,
-  secret: process.env.SECRET_OR_PRIVATE_KEY,
-  proxy: true,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    domain: process.env.NODE_ENV === 'production' && '.shinywaterjeong.com',
-  }
-}));
-
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1)
   app.use(morgan('combined'))
@@ -69,6 +54,21 @@ if (process.env.NODE_ENV === 'production') {
     credentials: true,
   }))
 }
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser(process.env.SECRET_OR_PRIVATE_KEY));
+app.use(session({
+  saveUninitialized: false,
+  resave: false,
+  secret: process.env.SECRET_OR_PRIVATE_KEY,
+  proxy: true,
+  cookie: {
+    httpOnly: true,
+    secure: true,
+    domain: process.env.NODE_ENV === 'production' && '.shinywaterjeong.com',
+  }
+}));
 
 io.on('connection', (socket) => {
   socket.on('submitMessage', (data) => {
