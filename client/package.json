@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next"
+    "dev": "next",
+    "build": "ANALYZE=true NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start"
   },
   "author": "JustinJeong5",
   "license": "ISC",
