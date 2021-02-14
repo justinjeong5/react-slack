@@ -43,7 +43,10 @@ function Messages() {
             src={chat.writer.image}
           />}
           title={cardTitle(chat)}
-          description={<span style={{ color: '#3f3f3f' }}>{chat.content}</span>}
+          description={<div>
+            <span style={{ color: '#3f3f3f' }}>{chat.content}</span>
+            <div>{chat.image && <Image src={chat.image} style={{ maxWidth: 200, maxHeight: 200 }} />}</div>
+          </div>}
         />
       </Card>
     </div>

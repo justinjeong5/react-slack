@@ -1,10 +1,11 @@
 import produce from 'immer'
 import {
   UPLOAD_IMAGE_REQUEST, UPLOAD_IMAGE_SUCCESS, UPLOAD_IMAGE_FAILURE,
+  CLEAR_IMAGE,
 } from './types'
 
 const initialState = {
-  imagePath: [],
+  imagePath: null,
 
   uploadImageDone: false,
   uploadImageLoading: false,
@@ -20,13 +21,16 @@ const imageReducer = (state = initialState, action) => {
         draft.uploadImageError = null;
         break;
       case UPLOAD_IMAGE_SUCCESS:
-        draft.imagePath = action.data.image;
+        draft.imagePath = action.data.image.src;
         draft.uploadImageLoading = false;
         draft.uploadImageDone = true;
         break;
       case UPLOAD_IMAGE_FAILURE:
         draft.uploadImageLoading = false;
         draft.uploadImageError = action.error;
+        break;
+      case CLEAR_IMAGE:
+        draft.imagePath = null;
         break;
       default:
         break;

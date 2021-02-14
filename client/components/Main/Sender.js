@@ -1,18 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Button } from 'antd'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button, Space, Image } from 'antd'
 
 import { sendChat, sendTypingFinish, sendTypingStart } from '../../util/socket';
+import { UPLOAD_IMAGE_REQUEST, CLEAR_IMAGE } from '../../reducers/types'
 
 function Sender() {
 
+  const dispatch = useDispatch();
+  const inputOpenImageRef = useRef();
   const [content, setContent] = useState('')
   const { currentUser } = useSelector(state => state.user)
   const { currentRoom } = useSelector(state => state.room)
+  const { imagePath, uploadImageLoading } = useSelector(state => state.image)
 
   const handleChange = useCallback((e) => {
     setContent(e.target.value)
   }, [])
+
+  const handleImageRef = () => {
+    inputOpenImageRef.current.click();
+  }
 
   useEffect(() => {
     if (content.length === 1) {
@@ -39,22 +47,60 @@ function Sender() {
   }, [content, currentUser, currentRoom])
 
   const handleSubmit = useCallback(() => {
-    if (!content.trim()) return;
+    if (!content.trim() && !imagePath) return;
     sendChat({
       room: currentRoom._id,
       content: content,
+      image: imagePath,
       writer: currentUser._id
     })
     setContent('')
-  }, [currentRoom, content, currentUser])
+    dispatch({
+      type: CLEAR_IMAGE
+    })
+  }, [currentRoom, content, currentUser, imagePath])
+
+  const handleImage = useCallback((event) => {
+    const imageFormData = new FormData();
+    imageFormData.append('image', event.target.files[0])
+
+    dispatch({
+      type: UPLOAD_IMAGE_REQUEST,
+      data: imageFormData
+    })
+  }, [])
+
+  const handleImageRemove = useCallback(() => {
+    dispatch({
+      type: CLEAR_IMAGE
+    })
+  }, [])
 
 
   return (
     <div>
       <textarea type="textArea" placeholder="메세지" value={content} onChange={handleChange} style={{ width: '100%' }} disabled={!currentUser._id} />
-      <Button type="primary" onClick={handleSubmit} style={{ float: 'right', marginTop: 10 }} disabled={!currentUser._id}>
-        전송
+      <Space style={{ float: 'right', marginTop: 10 }}>
+        {imagePath
+          ? <Button onClick={handleImageRemove}>이미지 제거</Button>
+          : <Button
+            onClick={handleImageRef}
+            loading={uploadImageLoading}
+            disabled={!currentUser._id || uploadImageLoading}
+          >이미지</Button>}
+        <Button type="primary" onClick={handleSubmit} disabled={!currentUser._id || uploadImageLoading}>
+          전송
       </Button>
+      </Space>
+      <div>
+        {imagePath && <Image src={imagePath} style={{ maxWidth: 100 }} />}
+      </div>
+      <input
+        type='file'
+        accept='image/jpeg, image/png'
+        hidden
+        onChange={handleImage}
+        ref={inputOpenImageRef} />
     </div>
   )
 }
