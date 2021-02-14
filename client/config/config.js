@@ -1,4 +1,5 @@
 const LOCAL_HOST = 'http://localhost:3065';
+const AWS_HOST = 'http://slack.api.shinywaterjeong.com'
 
 const config = {
   "development": {
@@ -8,7 +9,7 @@ const config = {
     'SERVER_URL': LOCAL_HOST,
   },
   "production": {
-    'SERVER_URL': LOCAL_HOST,
+    'SERVER_URL': AWS_HOST,
   }
 }
 
