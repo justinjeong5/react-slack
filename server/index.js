@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+dotenv.config();
 const morgan = require('morgan')
 const hpp = require('hpp')
 const helmet = require('helmet')
@@ -24,7 +25,6 @@ const io = require('socket.io')(server, {
   }
 })
 
-dotenv.config();
 const mongoose = require('mongoose')
 const connect = mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
