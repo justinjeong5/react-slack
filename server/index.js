@@ -86,7 +86,7 @@ const options = {
       },
     },
     servers: [{
-      url: "http://slack.api.shinywaterjeong.com",
+      url: "https://slack.api.shinywaterjeong.com",
     }],
   },
   apis: [
