@@ -86,8 +86,7 @@ const options = {
       },
     },
     servers: [{
-      // url: "slack.api.shinywaterjeong.com",
-      url: "http://localhost:3065",
+      url: "http://slack.api.shinywaterjeong.com",
     }],
   },
   apis: [

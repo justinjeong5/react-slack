@@ -1,3 +1,93 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Direct:
+ *       type: object
+ *       required:
+ *         - user1
+ *         - user2
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The auto-generated _id of the direct.
+ *         starred:
+ *           type: array
+ *             items:{}
+ *         typing:
+ *           type: array
+ *             items:{}
+ *         user1:
+ *           type: object
+ *           properties:
+ *             _id: 
+ *               type: string
+ *             email:
+ *               type: string
+ *             nickname:
+ *               type: string
+ *             image:
+ *               type: string
+ *             createdAt:
+ *               type: string
+ *               format: date
+ *             updatedAt:
+ *               type: string
+ *               format: date
+ *             presence:
+ *               type: boolean
+ *         user2:
+ *          type: object
+ *          properties:
+ *            _id: 
+ *              type: string
+ *            email:
+ *              type: string
+ *            nickname:
+ *              type: string
+ *            image:
+ *              type: string
+ *            createdAt:
+ *              type: string
+ *              format: date
+ *            updatedAt:
+ *              type: string
+ *              format: date
+ *            presence:
+ *              type: boolean
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record creation.
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record update.
+ */
+
+/**
+ *  @swagger
+ * tags:
+ *   name: Directs
+ *   description: API to manage directs.
+ */
+
+/**
+ * @swagger
+ * paths:
+ *   /direct/directs/:
+ *     get:
+ *       summary: array of directs
+ *       tags: [Directs]
+ *       responses:
+ *         "200":
+ *           description: The created direct.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Direct'
+ */
+
 const express = require('express');
 const router = express.Router();
 

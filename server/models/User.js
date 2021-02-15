@@ -6,18 +6,22 @@ const userSchema = mongoose.Schema({
   nickname: {
     type: String,
     maxLength: 50,
+    required: true,
   },
   email: {
     type: String,
     trim: true,
     unique: true,
+    required: true,
   },
   password: {
     type: String,
     minLength: 6,
+    required: true,
   },
   image: {
     type: String,
+    required: true,
   },
   token: {
     type: String,

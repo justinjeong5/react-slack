@@ -1,3 +1,63 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Image:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The auto-generated _id of the image.
+ *         image:
+ *           type: object
+ *           properties:
+ *             src:
+ *               type: string
+ *           description: The image of the image
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record creation.
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record update.
+ */
+
+/**
+ *  @swagger
+ * tags:
+ *   name: Images
+ *   description: API to manage images.
+ */
+
+/**
+ * @swagger
+ * paths:
+ *   /image/:
+ *     post:
+ *       summary: upload of image
+ *       tags: [Images]
+ *       requestBody:
+ *          required: true
+ *          content:
+ *            application/x-www-form-urlencoded:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  warning: 
+ *                    type: string
+ *                    description: this is multipart form
+ *       responses:
+ *         "200":
+ *           description: The created image.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Image'
+ */
+
+
 const express = require('express');
 const router = express.Router();
 const path = require('path')

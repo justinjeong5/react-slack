@@ -1,3 +1,130 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email
+ *         - nickname
+ *         - password
+ *         - image
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The auto-generated _id of the user.
+ *         email:
+ *           type: string
+ *           description: The email of user.
+ *         nickname:
+ *           type: string
+ *           description: The nickname of user.
+ *         image:
+ *           type: string
+ *           description: The image of user.
+ *         presence:
+ *           type: boolean
+ *           description: The status of user login or not
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record creation.
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date of the record update.
+ */
+
+/**
+ *  @swagger
+ * tags:
+ *   name: Users
+ *   description: API to manage users.
+ */
+
+/**
+ * @swagger
+ * paths:
+ *   /user/auth/:
+ *     get:
+ *       summary: status of user login
+ *       tags: [Users]
+ *       responses:
+ *         "200":
+ *           description: The created chat.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/User'
+ *   /user/register/:
+ *     post:
+ *       summary: register user
+ *       tags: [Users]
+ *       requestBody:
+ *          required: true
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  email: 
+ *                    type: string
+ *                  password:
+ *                    type: string
+ *                  nickname:
+ *                    type: string
+ *                  image:
+ *                    type: string
+ *                required:
+ *                  - nickname
+ *                  - email
+ *                  - password
+ *                  - image
+ *       responses:
+ *         "200":
+ *           description: The created chat.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/User'
+ *   /user/login/:
+ *     post:
+ *       summary: login user
+ *       tags: [Users]
+ *       requestBody:
+ *          required: true
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  email: 
+ *                    type: string
+ *                  password:
+ *                    type: string
+ *                required:
+ *                  - email
+ *                  - password
+ *       responses:
+ *         "200":
+ *           description: The created chat.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/User'
+ *   /user/logout/:
+ *     patch:
+ *       summary: logout user
+ *       tags: [Users]
+ *       responses:
+ *         "200":
+ *           description: The created chat.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/User'
+ */
+
 const express = require('express');
 const router = express.Router();
 const path = require('path')
