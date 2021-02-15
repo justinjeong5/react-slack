@@ -8,6 +8,8 @@ dotenv.config();
 const morgan = require('morgan')
 const hpp = require('hpp')
 const helmet = require('helmet')
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const app = express();
 
@@ -69,6 +71,41 @@ app.use(session({
     domain: process.env.NODE_ENV === 'production' && '.shinywaterjeong.com',
   }
 }));
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "React Slack made by JustinJeong",
+      description:
+        "React slack is chatting throught text, image in real time",
+      contact: {
+        name: "JustinJeong",
+        url: "https://github.com/justinjeong5",
+        email: "justin.jeong5@email.com",
+      },
+    },
+    servers: [{
+      // url: "slack.api.shinywaterjeong.com",
+      url: "http://localhost:3065",
+    }],
+  },
+  apis: [
+    "./routes/chat.js",
+    "./routes/direct.js",
+    "./routes/image.js",
+    "./routes/room.js",
+    "./routes/star.js",
+    "./routes/user.js",
+  ],
+};
+
+const specs = swaggerJsdoc(options);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+);
 
 io.on('connection', (socket) => {
   socket.on('submitMessage', (data) => {
