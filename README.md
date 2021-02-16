@@ -54,8 +54,15 @@ Difference from Socket communications and client-server communications is the wh
 ## 📶 Apis
 
 [Apis Document](https://slack.api.shinywaterjeong.com/api-docs/)
+
 ⚠️ This Apis document does not contain some of apis which from socket.io methods: submitMessage, createRoom, createDirect, submitPresence, submitAbsence, submitTypingStart, submitTypingFinish.
 
 ## 🗃️ Database
 
 ![slack-database](https://user-images.githubusercontent.com/44011462/107945540-24232e00-6fd3-11eb-96e3-7ded55784585.png)
+
+## 🚧 Futurework
+
+- Grouping of chat just like slack does: upper hierarchical group can contain current form of chatting.
+
+![groupchat](https://user-images.githubusercontent.com/44011462/108012653-3e015700-704d-11eb-9664-bb5e8e6dc9fc.png)
