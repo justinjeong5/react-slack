@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const session = require('express-session')
 const dotenv = require('dotenv');
 dotenv.config();
 const morgan = require('morgan')
@@ -60,17 +59,6 @@ if (process.env.NODE_ENV === 'production') {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.SECRET_OR_PRIVATE_KEY));
-app.use(session({
-  saveUninitialized: false,
-  resave: false,
-  secret: process.env.SECRET_OR_PRIVATE_KEY,
-  proxy: true,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    domain: process.env.NODE_ENV === 'production' && '.shinywaterjeong.com',
-  }
-}));
 
 const options = {
   definition: {
