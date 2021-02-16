@@ -45,6 +45,9 @@ function DirectRooms() {
 
   const renderPresence = useCallback((direct) => {
     const presenceIndex = presentUsers.findIndex(user => user._id === direct.writer._id);
+    if (presenceIndex === -1) {
+      return <Badge color='gray' />
+    }
     const present = presentUsers[presenceIndex].presence;
     return present ? <Badge color='green' /> : <Badge color='gray' />
   }, [presentUsers])
