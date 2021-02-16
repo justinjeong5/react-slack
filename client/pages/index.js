@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import Head from 'next/head'
 import { END } from 'redux-saga'
 import axios from 'axios'
 import wrapper from '../store/configureStore'
@@ -77,11 +78,15 @@ function Home() {
     }
   }, [])
 
-  return (
+  return (<>
+    <Head>
+      <title>React Slack | by JustinJeong</title>
+    </Head>
     <div style={{ display: 'flex' }}>
       <Menu />
       <Main />
     </div>
+  </>
   )
 }
 
