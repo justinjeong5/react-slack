@@ -66,3 +66,89 @@ Difference from Socket communications and client-server communications is the wh
 - Grouping of chat just like slack does: upper hierarchical group can contain current form of chatting.
 
 ![groupchat](https://user-images.githubusercontent.com/44011462/108012653-3e015700-704d-11eb-9664-bb5e8e6dc9fc.png)
+
+## 🛠️ Issue
+
+![image](https://user-images.githubusercontent.com/44011462/108018398-f84b8b00-705a-11eb-9ba8-e7a5ee03f98c.png)
+
+Web socket worked just fine in development environment, but once after deployed on aws-ec2 & nginx error comes up like this: ***Error during WebSocket handshack***. Mainly, error comes from the structure of reverse proxy: nginx. 
+
+## 🏫 Research
+
+### https
+
+<details>
+
+#### nginx 
+
+![nginx](https://user-images.githubusercontent.com/44011462/106407535-a3671c80-647f-11eb-97c7-72cc5fb66743.png)
+
+##### ssl certification
+```bash
+$ sudo apt-get install nginx
+$ sudo su
+$ vim /etc/nginx/nginx.conf
+# {
+#   ...
+#   server {
+#     server_name slack.api.shinywaterjeong.com
+#     listen 80;
+#     location / {
+#       proxy_set_header HOST $host;
+#       proxy_pass http://localhost:3065;
+#       proxy_redirect off;
+#       # setting for websocket
+#       proxy_http_version 1.1;
+#       proxy_set_header Upgrade $http_upgrade;
+#       proxy_set_header Connection "upgrade";
+#     }
+#   }
+#   ...
+# }
+$ exit
+$ sudo lsof -i tcp:80
+  # port 80 should be idle
+$ sudo apt install snapd
+$ sudo snap install core; sudo snap refresh core
+$ sudo snap install --classic certbot
+$ sudo certbot --nginx
+$ sudo certbot renew --dry-run
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Congratulations, all simulated renewals succeeded: 
+  #   /etc/letsencrypt/live/yourDomainName/chine.pem (success)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+```
+
+##### success ssl setting
+```bash
+# /etc/nginx/nginx.conf
+{
+  ...
+  server {
+    server_name slack.api.shinywaterjeong.com
+    listen 80;
+    location / {
+      proxy_set_header HOST $host;
+      proxy_pass http://localhost:3065;
+      proxy_redirect off;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/slack.api.shinywaterjeong.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/slack.api.shinywaterjeong.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+  }
+  server {
+    if ($host = slack.api.shinywaterjeong.com) {
+      return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    server_name slack.api.shinywaterjeong.com
+    listen 80;
+    return 404; # managed by Certbot
+  }
+}
+```
+
+</details>
