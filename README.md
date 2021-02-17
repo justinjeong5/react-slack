@@ -104,6 +104,30 @@ This code leads to response with cookie named 'slack_auth' on network tab on chr
 Once user tyied login and succeded the procedure, there should be cookie which contains 'slack_auth' but there no 'slack_auth' exist.
 ![image](https://user-images.githubusercontent.com/44011462/108150939-f8aa5b80-7118-11eb-8830-f60d7d31fbfe.png)
 
+#### solution
+
+```javascript
+// res.cookies option for routes/user login
+{
+  domain: '.shinywaterjeong.com',
+  sameSite: 'none',
+  secure: true,
+  httpOnly: true,
+}
+
+if (process.env.NODE_ENV === 'production') {
+  return res.cookie('slack_auth', token, {
+    domain: '.shinywaterjeong.com',
+    sameSite: 'none',
+    secure: true,
+    httpOnly: true,
+  }).status(200).json({ user: fullUser })
+} else {
+  return res.cookie('slack_auth', token).status(200).json({ user: fullUser })
+}
+
+```
+
 
 ## 🏫 Research
 
