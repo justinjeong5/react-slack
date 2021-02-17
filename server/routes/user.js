@@ -203,7 +203,6 @@ router.post('/login', (req, res) => {
             return res.status(400).json({ message: '토큰을 생성하는 과정에서 문제가 발생했습니다.', error })
           }
           const { password, token, ...fullUser } = user._doc;
-          console.log(token, 'login User token');
           if (process.env.NODE_ENV === 'production') {
             return res.cookie('slack_auth', token, {
               domain: '.shinywaterjeong.com',
