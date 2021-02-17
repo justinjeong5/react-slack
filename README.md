@@ -81,6 +81,23 @@ These are webSocket methods that used for React Slack Application here below. Th
 
 Web socket worked just fine in development environment, but once after deployed on aws-ec2 & nginx error comes up like this: ***Error during WebSocket handshack***. Mainly, error comes from the structure of reverse proxy: nginx. 
 
+### Solution 
+
+```bash
+# /ect/nginx/nginx.conf
+
+server {
+  ...
+  location / {
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}
+```
+
+reference: [nginx](http://nginx.org/en/docs/http/websocket.html)
+
 ### Cookies
 
 For the login strategy, I made use of **json web token**, **cookie** and database. 
@@ -184,9 +201,15 @@ $ sudo certbot renew --dry-run
     server_name slack.api.shinywaterjeong.com
     listen 80;
     location / {
-      proxy_set_header HOST $host;
-      proxy_pass http://localhost:3065;
+      proxy_set_header X-Forwarded-For $remote_addr;
       proxy_redirect off;
+      proxy_pass http://localhost:3065;
+
+      # WebSocket
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header Host $host;
     }
 
     listen 443 ssl; # managed by Certbot
@@ -195,6 +218,7 @@ $ sudo certbot renew --dry-run
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
   }
+
   server {
     if ($host = slack.api.shinywaterjeong.com) {
       return 301 https://$host$request_uri;
