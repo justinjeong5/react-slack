@@ -23,6 +23,13 @@ Difference from Socket communications and client-server communications is the wh
 
 ![socketio](https://user-images.githubusercontent.com/44011462/107924148-d946ed80-6fb5-11eb-86a4-ae64524c0e4e.png)
 
+These are webSocket methods that used for React Slack Application here below. These have a one thing in common that these method both send signal and save data on database: mongodb. For say, a client-side method trigger the handler method on server, then it handles what server have to do: saving on mongodb.
+- `submitMessage`: it sends message. Once the signal is emitted, `submitMessage handler` will be triggered on nodejs server, which handles messages and emits `returnMessage`. `returnMessage` will trigger client's side websocket so that user will be notified almost instantly.
+- `createRoom`: it triggers `createRoom handler` on server, so that chatting room information will be stored on mongodb, and emits `returnCreateRoom` for client. 
+- `createDirect`: it triggers `createDirect handler` just like `createRoom signal`.
+- `submitPresence` & `submitAbsence`: it emits signal whenever user login success or logout success. Once signal is emitted and server catches the `submitPresence` or `submitAbsence` signal, user's information will be stored on mongodb, so that new user who just got login can notice others' presence status from database.
+- `submitTypingStart` & `submitTypingFinish`: it almost same as what `submitPresence` & `submitAbsence` does for store current status. `submitTypingStart` will be triggered whenever user just types the first letter of chatting and `submitTypingFinish` will be triggered whenever the first letter of chatting is removed on chatting board.
+
 
 ## ⭐ Features
 
@@ -69,9 +76,34 @@ Difference from Socket communications and client-server communications is the wh
 
 ## 🛠️ Issue
 
+### WebSocket
 ![image](https://user-images.githubusercontent.com/44011462/108018398-f84b8b00-705a-11eb-9ba8-e7a5ee03f98c.png)
 
 Web socket worked just fine in development environment, but once after deployed on aws-ec2 & nginx error comes up like this: ***Error during WebSocket handshack***. Mainly, error comes from the structure of reverse proxy: nginx. 
+
+### Cookies
+
+For the login strategy, I made use of **json web token**, **cookie** and database. 
+```javascript
+// redux axios setting
+axios.defaults.withCredentials = true;
+
+// express cors setting
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }))
+
+// routes/user.js
+res.cookie('slack_auth', token).status(200).json({ user: fullUser })
+```
+
+This code leads to response with cookie named 'slack_auth' on network tab on chrome browser just like below.
+![image](https://user-images.githubusercontent.com/44011462/108150679-6ace7080-7118-11eb-96ed-754f40edbeed.png)
+
+Once user tyied login and succeded the procedure, there should be cookie which contains 'slack_auth' but there no 'slack_auth' exist.
+![image](https://user-images.githubusercontent.com/44011462/108150939-f8aa5b80-7118-11eb-8830-f60d7d31fbfe.png)
+
 
 ## 🏫 Research
 
