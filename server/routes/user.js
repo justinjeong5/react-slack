@@ -203,7 +203,7 @@ router.post('/login', (req, res) => {
             return res.status(400).json({ message: '토큰을 생성하는 과정에서 문제가 발생했습니다.', error })
           }
           const { password, token, ...fullUser } = user._doc;
-          return res.cookie(process.env.COOKIE_NAME, token).status(200).json({ user: fullUser })
+          return res.cookie('slack_auth', token).status(200).json({ user: fullUser })
         })
       })
     })
@@ -220,7 +220,7 @@ router.patch('/logout', auth, (req, res) => {
       if (!user) {
         return res.status(400).json({ message: '존재하지 않는 사용자입니다.' })
       }
-      return res.cookie(process.env.COOKIE_NAME, '').status(200).json({ user: {} });
+      return res.cookie('slack_auth', '').status(200).json({ user: {} });
     })
 })
 
