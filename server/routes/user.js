@@ -229,7 +229,16 @@ router.patch('/logout', auth, (req, res) => {
       if (!user) {
         return res.status(400).json({ message: '존재하지 않는 사용자입니다.' })
       }
-      return res.cookie('slack_auth', '').status(200).json({ user: {} });
+      if (process.env.NODE_ENV === 'production') {
+        return res.cookie('slack_auth', '', {
+          domain: '.shinywaterjeong.com',
+          sameSite: 'none',
+          secure: true,
+          httpOnly: true,
+        }).status(200).json({ user: {} });
+      } else {
+        return res.cookie('slack_auth', '').status(200).json({ user: {} });
+      }
     })
 })
 
