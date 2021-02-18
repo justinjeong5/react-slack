@@ -1,7 +1,7 @@
 const { User } = require("../models/User");
 
 const auth = (req, res, next) => {
-  let token = req.cookies.slack_auth;
+  let token = req.cookies['slack_auth'];
   if (!token) {
     return res.status(400).json({ message: '로그인 되지 않은 사용자입니다.' })
   }
