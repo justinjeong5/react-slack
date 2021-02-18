@@ -1,6 +1,8 @@
 # React Slack
 
-![image](https://user-images.githubusercontent.com/44011462/107928529-c9320c80-6fbb-11eb-8dc6-efeb15ad0475.png)
+![Screen-Recording-2021-02-18-at-1](https://user-images.githubusercontent.com/44011462/108309271-9a52ab00-71f4-11eb-9d85-22b4aaf21e6d.gif)
+![Screen Recording 2021-02-18 at 12 39 13 PM](https://user-images.githubusercontent.com/44011462/108307330-f7e4f880-71f0-11eb-866f-60fc9e7610fd.gif)
+
 
 React Slack [(here)](http://slack.shinywaterjeong.com) is realtime chatting application throught public room, direct room.
 
@@ -35,7 +37,7 @@ These are webSocket methods that used for React Slack Application here below. Th
 
 - User
   - Register, Login, Logout
-  - Image edit
+  - Image upload
     - aws-s3
   - Login Status in Real Time
 
