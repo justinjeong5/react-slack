@@ -128,13 +128,6 @@ Once user tyied login and succeded the procedure, there should be cookie which c
 
 ```javascript
 // res.cookies option for routes/user login
-{
-  domain: '.shinywaterjeong.com',
-  sameSite: 'none',
-  secure: true,
-  httpOnly: true,
-}
-
 if (process.env.NODE_ENV === 'production') {
   return res.cookie('slack_auth', token, {
     domain: '.shinywaterjeong.com',
@@ -145,8 +138,15 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   return res.cookie('slack_auth', token).status(200).json({ user: fullUser })
 }
-
 ```
+
+### Cookie #2
+React Slack make use of express middleware for identification of user before do some Api works. User token from cookie will be certified with User token from database, so that server will be noticed who is asking for Api works. Below is logs of backend server requests and I put some console.log for token that server is now receiving from client request and cookie in request header. I used only one User and found there are two different token printed on server console, which leads to response error: code 400.
+
+![image](https://user-images.githubusercontent.com/44011462/108319856-5c11b780-7205-11eb-83f9-aff3f8544311.png)
+![image](https://user-images.githubusercontent.com/44011462/108319933-78155900-7205-11eb-98f1-2294ea9892d0.png)
+
+
 
 
 ## 🏫 Research
