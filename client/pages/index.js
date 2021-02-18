@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { END } from 'redux-saga'
 import axios from 'axios'
+import { Button, Drawer } from 'antd'
+import { MenuOutlined } from '@ant-design/icons'
 import wrapper from '../store/configureStore'
 
 import Menu from '../components/Menu'
@@ -77,10 +79,44 @@ function Home() {
     }
   }, [])
 
+  const [visible, setVisible] = useState(false)
+
+  const showDrawer = () => {
+    setVisible(true)
+  };
+
+  const onClose = () => {
+    setVisible(false)
+  };
+
   return (
-    <div style={{ display: 'flex' }}>
-      <Menu />
-      <Main />
+    <div>
+      <div style={{ zIndex: 10, position: 'absolute', right: 0 }}>
+        <Button
+          className="menu__mobile-button"
+          type="primary"
+          onClick={showDrawer}
+        >
+          <MenuOutlined />
+        </Button>
+      </div>
+      <div style={{ display: 'flex' }}>
+        <div className='menu__normal-wrapper'>
+          <Menu />
+        </div>
+        <div className='main__normal-wrapper'>
+          <Main />
+        </div>
+      </div>
+      <Drawer
+        width='300px'
+        placement="left"
+        visible={visible}
+        closable={false}
+        onClose={onClose}
+      >
+        <Menu />
+      </Drawer>
     </div>
   )
 }

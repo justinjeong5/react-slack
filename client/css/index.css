@@ -4,3 +4,28 @@ body {
 		sans-serif;
 	margin: 0px;
 }
+
+.menu__mobile-button {
+	float: right;
+	height: 30px;
+	padding: 6px;
+	margin: 5px 10px;
+	display: none !important; /* use of important to overwrite ant-btn */
+	background: #3e91f7;
+}
+
+@media (max-width: 767px) {
+	.menu__mobile-button {
+		display: inline-block !important;
+	}
+
+	.menu__normal-wrapper {
+		display: none !important;
+	}
+	.main__normal-wrapper {
+		width: 100%;
+	}
+	.ant-drawer-body {
+		padding: 0 !important;
+	}
+}
