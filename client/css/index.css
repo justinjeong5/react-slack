@@ -14,6 +14,10 @@ body {
 	background: #3e91f7;
 }
 
+.main__normal-wrapper {
+	width: calc(100vw - 300px);
+}
+
 @media (max-width: 767px) {
 	.menu__mobile-button {
 		display: inline-block !important;
@@ -23,7 +27,7 @@ body {
 		display: none !important;
 	}
 	.main__normal-wrapper {
-		width: 100%;
+		width: 100vw;
 	}
 	.ant-drawer-body {
 		padding: 0 !important;
