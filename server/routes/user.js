@@ -242,7 +242,7 @@ router.patch('/logout', auth, (req, res) => {
     })
 })
 
-router.get('/users', auth, (req, res) => {
+router.get('/users', (req, res) => {
   User.find().exec((error, users) => {
     if (error) {
       console.error(error);

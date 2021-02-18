@@ -43,7 +43,9 @@ const presenceReducer = (state = initialState, action) => {
         break;
       case PRESENCE_USER_SUCCESS: {
         const presenceIndex = draft.presentUsers.findIndex(presence => presence._id === action.data.userId)
-        draft.presentUsers[presenceIndex].presence = true;
+        if (presenceIndex !== -1) {
+          draft.presentUsers[presenceIndex].presence = true;
+        }
         draft.presenceUserLoading = false;
         draft.presenceUserDone = true;
         break;
@@ -59,7 +61,9 @@ const presenceReducer = (state = initialState, action) => {
         break;
       case ABSENCE_USER_SUCCESS: {
         const presenceIndex = draft.presentUsers.findIndex(presence => presence._id === action.data.userId)
-        draft.presentUsers[presenceIndex].presence = false;
+        if (presenceIndex !== -1) {
+          draft.presentUsers[presenceIndex].presence = false;
+        }
         draft.absenceUserLoading = false;
         draft.absenceUserDone = true;
         break;
