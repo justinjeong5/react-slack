@@ -67,6 +67,11 @@ These are webSocket methods that used for React Slack Application here below. Th
 
 ⚠️ This Apis document does not contain some of apis which from socket.io methods: submitMessage, createRoom, createDirect, submitPresence, submitAbsence, submitTypingStart, submitTypingFinish.
 
+## 🗄️ Redux
+
+![redux_flow_slack](https://user-images.githubusercontent.com/44011462/108623353-f67e2f00-7481-11eb-8fbe-4a94ce3f918d.png)
+
+
 ## 🗃️ Database
 
 ![slack-database](https://user-images.githubusercontent.com/44011462/107945540-24232e00-6fd3-11eb-96e3-7ded55784585.png)
