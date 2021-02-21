@@ -1,8 +1,6 @@
 # React Slack
 
-![Screen-Recording-2021-02-18-at-1](https://user-images.githubusercontent.com/44011462/108309271-9a52ab00-71f4-11eb-9d85-22b4aaf21e6d.gif)
-![Screen Recording 2021-02-18 at 12 39 13 PM](https://user-images.githubusercontent.com/44011462/108307330-f7e4f880-71f0-11eb-866f-60fc9e7610fd.gif)
-
+![Layer 2](https://user-images.githubusercontent.com/44011462/108623601-211cb780-7483-11eb-907f-e95b649bc1bd.png)
 
 React Slack [(here)](http://slack.shinywaterjeong.com) is realtime chatting application throught public room, direct room.
 
