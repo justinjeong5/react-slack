@@ -80,9 +80,9 @@ const roomReducer = (state = initialState, action) => {
         draft.typingStartError = action.error;
         break;
       case TYPING_FINISH_SUBSCRIBE:
-        draft.typingFisnishLoading = true;
-        draft.typingFisnishDone = false;
-        draft.typingFisnishError = null;
+        draft.typingFinishLoading = true;
+        draft.typingFinishDone = false;
+        draft.typingFinishError = null;
         break;
       case TYPING_FINISH_SUCCESS: {
         if (draft.currentRoom._id === action.data.room) {
@@ -91,13 +91,13 @@ const roomReducer = (state = initialState, action) => {
             draft.currentRoom.typing.splice(currentIndex, 1)
           }
         }
-        draft.typingFisnishLoading = false;
-        draft.typingFisnishDone = true;
+        draft.typingFinishLoading = false;
+        draft.typingFinishDone = true;
         break;
       }
       case TYPING_FINISH_FAILURE:
-        draft.typingFisnishLoading = false;
-        draft.typingFisnishError = action.error;
+        draft.typingFinishLoading = false;
+        draft.typingFinishError = action.error;
         break;
       case GET_CURRENT_ROOM:
         draft.currentRoom = action.data.room;
