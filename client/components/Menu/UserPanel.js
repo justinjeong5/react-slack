@@ -120,21 +120,21 @@ function UserPanel() {
       {currentUser._id && <div style={{ display: 'flex', marginBottom: '1rem' }}>
         <Image
           style={{ width: 40, height: 40, marginTop: 3, borderRadius: 20 }}
-          src={currentUser.image} />
-        <Dropdown
-          overlay={<Menu>
-            <Menu.Item disabled={setUserImageLoading} onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
-          </Menu>}
-          trigger={['click']}
-        >
-          <span style={{ marginLeft: 10 }} onClick={(e) => e.preventDefault()}>
-            <div>
-              <div style={{ fontSize: '1.2em' }}>{currentUser.nickname}</div>
-              <div>{currentUser.email} <DownOutlined /></div>
-            </div>
-
-          </span>
-        </Dropdown>
+          src={currentUser.image}
+        />
+        <span style={{ marginLeft: 10 }} onClick={(e) => e.preventDefault()}>
+          <div>
+            <div style={{ fontSize: '1.2em' }}>{currentUser.nickname}</div>
+            <Dropdown
+              overlay={<Menu>
+                <Menu.Item disabled={setUserImageLoading} onClick={handleUploadImageRef}>프로필 사진 변경</Menu.Item>
+              </Menu>}
+              trigger={['click']}
+            >
+              <div style={{ cursor: 'pointer' }} >{currentUser.email} <DownOutlined /></div>
+            </Dropdown>
+          </div>
+        </span>
       </div>}
       <input
         type='file'
