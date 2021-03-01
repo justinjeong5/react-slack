@@ -37,9 +37,14 @@ function Starred() {
           <StarOutlined />{` STARRED [${starList.length}]`}
         </div>
       </Title>
-      {starList.map(star => (<div key={uuidv4()} onClick={handleCurrent(star)} style={{ padding: '5px 10px', marginTop: 5, ...style(star) }}>
-        {`# ${star.title}`}
-      </div>))}
+      {starList.map(star => (
+        <div
+          key={uuidv4()}
+          onClick={handleCurrent(star)}
+          style={{ padding: '5px 10px', marginTop: 5, cursor: 'pointer', ...style(star) }}>
+          {`# ${star.title}`}
+        </div>
+      ))}
       {starList.length === 0 && <div style={{ marginLeft: 25, color: '#c3c3c3' }}>즐겨찾기를 사용해보세요</div>}
     </div>
   )

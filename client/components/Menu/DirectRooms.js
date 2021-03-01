@@ -66,7 +66,7 @@ function DirectRooms() {
         <div
           key={uuidv4()}
           onClick={handleCurrent(direct)}
-          style={{ padding: '5px 10px', marginTop: 5, ...style(direct) }}>
+          style={{ padding: '5px 10px', marginTop: 5, cursor: 'pointer', ...style(direct) }}>
           <span>{`# ${direct.title} `} {renderPresence(direct)}</span>
           <Badge showZero={false} count={count(direct)} offset={[7, 0]} size="small" overflowCount='9' />
         </div>))}

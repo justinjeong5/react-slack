@@ -77,7 +77,7 @@ function ChatRooms() {
         <div
           key={uuidv4()}
           onClick={handleCurrent(room)}
-          style={{ padding: '5px 10px', marginTop: 5, ...style(room) }}>
+          style={{ padding: '5px 10px', marginTop: 5, cursor: 'pointer', ...style(room) }}>
           <span>{`# ${room.title}`}</span>
           <Badge showZero={false} count={count(room)} offset={[7, 0]} size="small" overflowCount='9' />
         </div>
