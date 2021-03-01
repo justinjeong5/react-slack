@@ -15,7 +15,9 @@ function Sender() {
   const { imagePath, uploadImageLoading } = useSelector(state => state.image)
 
   const handleChange = useCallback((e) => {
-    setContent(e.target.value)
+    if (e.target.value.split('').indexOf('\n') < 0) {
+      setContent(e.target.value)
+    }
   }, [])
 
   const handleImageRef = () => {
@@ -54,10 +56,10 @@ function Sender() {
       image: imagePath,
       writer: currentUser._id
     })
-    setContent('')
     dispatch({
       type: CLEAR_IMAGE
     })
+    setContent('')
   }, [currentRoom, content, currentUser, imagePath])
 
   const handleImage = useCallback((event) => {
@@ -76,10 +78,23 @@ function Sender() {
     })
   }, [])
 
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  }
 
   return (
     <div>
-      <textarea type="textArea" placeholder="메세지" value={content} onChange={handleChange} style={{ width: '100%' }} disabled={!currentUser._id} />
+      <textarea
+        type='textArea'
+        placeholder='메세지'
+        value={content}
+        onChange={handleChange}
+        onKeyPress={handleEnter}
+        style={{ width: '100%' }}
+        disabled={!currentUser._id}
+      />
       <Space style={{ float: 'right', marginTop: 10 }}>
         {imagePath
           ? <Button onClick={handleImageRemove}>이미지 제거</Button>
@@ -88,9 +103,9 @@ function Sender() {
             loading={uploadImageLoading}
             disabled={!currentUser._id || uploadImageLoading}
           >이미지</Button>}
-        <Button type="primary" onClick={handleSubmit} disabled={!currentUser._id || uploadImageLoading}>
+        <Button type='primary' onClick={handleSubmit} disabled={!currentUser._id || uploadImageLoading}>
           전송
-      </Button>
+        </Button>
       </Space>
       <div>
         {imagePath && <Image src={imagePath} style={{ maxWidth: 100 }} />}
