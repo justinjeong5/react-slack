@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Space, Image } from 'antd'
+import { Button, Space, Image, message } from 'antd'
 
 import { sendChat, sendTypingFinish, sendTypingStart } from '../../util/socket';
 import { UPLOAD_IMAGE_REQUEST, CLEAR_IMAGE } from '../../reducers/types'
@@ -50,6 +50,8 @@ function Sender() {
 
   const handleSubmit = useCallback(() => {
     if (!content.trim() && !imagePath) return;
+    if (!currentUser._id) return message.error('잘못된 접근입니다!');
+
     sendChat({
       room: currentRoom._id,
       content: content,
